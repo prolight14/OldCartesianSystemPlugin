@@ -1,0 +1,23 @@
+{
+    "name": "cartesian-system-plugin",
+    "version": "1.0.0-alpha",
+    "description": "Phaser 3 Cartesian System Plugin",
+    "main": "src/CartesianSystemPlugin.js",
+    "scripts": {
+        "build": "webpack"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/prolight14/cartesian-system-plugin"
+    },
+    "author": "prolight14",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/prolight14/cartesian-system-plugin/issues"
+    },
+    "homepage": "https://github.com/prolight14/cartesian-system-plugin#readme",
+    "devDependencies": {
+        "webpack": "^4.44.1",
+        "webpack-cli": "^3.3.12"
+    }
+}
