@@ -29,9 +29,7 @@ CartesianSystemPlugin.prototype = {
 
     setupWorld: function(config)
     {
-        this.world = new CartesianSystem.World(config).init();
-
-
+        return this.world = new CartesianSystem.World(config).init();
     },
 
     start: function()
@@ -49,6 +47,7 @@ CartesianSystemPlugin.prototype = {
         this.shutdown();
 
         this.scene = undefined;
+        this.world = undefined;
     }
 };
 

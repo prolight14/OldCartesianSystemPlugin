@@ -1,4 +1,4 @@
-export default class Player extends Phaser.GameObjects.Sprite
+class Wanderer extends Phaser.GameObjects.Sprite
 {
     constructor (scene, x, y, texture, frame)
     {
@@ -35,3 +35,5 @@ export default class Player extends Phaser.GameObjects.Sprite
         this.y += this.velocity.y;
     }
 }
+
+export default serialize(Wanderer);

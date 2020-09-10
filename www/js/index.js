@@ -22,9 +22,27 @@ var config = {
 };  
 
 var game = new Phaser.Game(config);
-window.game = game;
 
-let player, wanderers;
+var worldConfig = {
+    camera: {
+        window: {
+            x: 0,
+            y: 0,
+            width: config.width,
+            height: config.height
+        }
+    },
+    grid: {
+        rows: 12,
+        cols: 12,
+        cell: {
+            height: 270,
+            width: 270
+        }
+    },
+};
+
+let player, cam;
 
 function preload()
 {
@@ -40,58 +58,30 @@ function preload()
 
 function create()
 {
-    player = new Player(this, 200, 200, "player");
-    window.player = player;
+    this.csPlugin.setupWorld(worldConfig);
+    var world = this.csPlugin.world;
 
-    this.cameras.main.startFollow(player);
-    
-    wanderers = [];
-    
+    var aa_players = world.add.gameObjectArray(Player);
+
+    player = aa_players.add(this, 200, 200, "player");
+  
+    cam = this.cameras.main;
+    cam.startFollow(player);
+    world.cam.setFocus(player.x, player.y, "player");
+    world.cam.update();
+
+    var aa_wanderers = world.add.gameObjectArray(Wanderer);
+
     for(var i = 0; i < 330; i++)
     {
-        wanderers.push(new Wanderer(this, Math.random() * 1000, Math.random() * 620, "wanderer"));
+        aa_wanderers.add(this, Math.random() * 1000, Math.random() * 620, "wanderer");
     }
-
-    console.log(this.sys);
-
-    for(var i = 0; i < wanderers.length; i++)
-    {
-        this.sys.displayList.remove(wanderers[i]);
-    }
-
-    this.extendedView = (offsetLeftX, offsetRightX, offsetTopY, offsetBottomY) => 
-    {
-        return new Phaser.Geom.Rectangle(
-            this.cameras.main.worldView.x - offsetLeftX,
-            this.cameras.main.worldView.y - offsetTopY,
-            this.cameras.main.worldView.width + offsetRightX + offsetLeftX,
-            this.cameras.main.worldView.height + offsetBottomY + offsetTopY
-        );
-    };
 }
 
 function update()
 {
-    var cam = this.cameras.main;
+    var world = this.csPlugin.world;
 
-    if(typeof wanderers[0] !== "undefined")
-    {
-        var inflatedView = this.extendedView(
-            wanderers[0].displayWidth, 
-            wanderers[0].displayHeight, 
-            wanderers[0].displayWidth, 
-            wanderers[0].displayHeight);
-
-        // Cull them (yes I know it's laggy but this is a test)
-        for(var i = 0; i < wanderers.length; i++)
-        {
-            if(inflatedView.contains(wanderers[i].x, wanderers[i].y))
-            {
-                this.sys.displayList.add(wanderers[i]);
-                continue;
-            }
-
-            this.sys.displayList.remove(wanderers[i]);
-        }
-    }
+    world.cam.updateFocus(player.x, player.y);
+    world.cam.update();
 }
