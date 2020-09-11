@@ -12,9 +12,26 @@ class Player extends Phaser.GameObjects.Sprite
             w: scene.input.keyboard.addKey('w'),
             s: scene.input.keyboard.addKey('s')
         };
+
+        var _this = this;
+
+        // Could be added in the cartesian system plugin
+        this.body = {
+            moves: true,
+            boundingBox: {},
+            updateBoundingBox: function()
+            {
+                this.boundingBox.minX = _this.x - _this.displayWidth;
+                this.boundingBox.minY = _this.y - _this.displayHeight;
+                this.boundingBox.maxX = _this.x + _this.displayWidth;
+                this.boundingBox.maxY = _this.y + _this.displayHeight;
+            }
+        };
+
+        this.body.updateBoundingBox();
     }
 
-    preUpdate ()
+    update ()
     {
         if(this.keys.a.isDown)
         {
@@ -32,6 +49,9 @@ class Player extends Phaser.GameObjects.Sprite
         {
             this.y += 5;
         }
+
+        // Could be added in the cartesian system plugin
+        this.body.updateBoundingBox();
     }
 }
 

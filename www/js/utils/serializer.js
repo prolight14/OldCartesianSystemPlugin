@@ -1,7 +1,15 @@
-function serialize(classObject)
+function serialize(Cls)
 {
-    return function(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
+    return function()
     {
-        return new classObject(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z);
-    }
+        // https://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
+        var newCls = new (Function.prototype.bind.apply(Cls, [null].concat(Array.prototype.slice.call(arguments))));
+
+        for(var i in newCls)
+        {
+            this[i] = newCls[i];
+        }
+
+        return newCls;
+    };
 }

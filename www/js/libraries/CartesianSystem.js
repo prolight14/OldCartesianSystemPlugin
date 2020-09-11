@@ -751,7 +751,6 @@ function World(config)
             value: function()
             {
                 var gameObject = lastAdd.apply(this, arguments);
-
                 cameraGrid.addRef(gameObject);
                 return gameObject;
             }
@@ -765,7 +764,7 @@ function World(config)
             value: function()
             {
                 var gameObject = lastAddObject.apply(this, arguments);
-                if(!gameObject) { return; }
+                if(gameObject === undefined) { return; }
 
                 cameraGrid.addRef(gameObject);
                 return gameObject;
@@ -1029,10 +1028,11 @@ function createAA(object, keypairs, arrayName)
             this.cache.tempId = id;
             this.length++;
 
+            // Possible problem -object not having a prototype
             var item = Object.create(object.prototype);
             object.apply(item, arguments);
             this[id] = item;
-            this[id]._name = this.cache.tempName || this.name;
+            this[id]._name = this.cache.tempName || this._name;
             this[id]._arrayName = this._name;
             this[id]._id = id;
             return item;
