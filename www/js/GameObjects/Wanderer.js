@@ -1,4 +1,4 @@
-class Wanderer extends Phaser.GameObjects.Sprite
+export default class Wanderer extends Phaser.GameObjects.Sprite
 {
     constructor (scene, x, y, texture, frame)
     {
@@ -23,17 +23,17 @@ class Wanderer extends Phaser.GameObjects.Sprite
 
         var _this = this;
 
+        if(!this.body) {this.body = {};}
+
+
         // Could be added in the cartesian system plugin
-        this.body = {
-            moves: true,
-            boundingBox: {},
-            updateBoundingBox: function()
-            {
-                this.boundingBox.minX = _this.x - _this.displayWidth;
-                this.boundingBox.minY = _this.y - _this.displayHeight;
-                this.boundingBox.maxX = _this.x + _this.displayWidth;
-                this.boundingBox.maxY = _this.y + _this.displayHeight;
-            }
+        this.body.boundingBox = {};
+        this.body.updateBoundingBox = function()
+        {
+            this.boundingBox.minX = _this.x - _this.displayWidth;
+            this.boundingBox.minY = _this.y - _this.displayHeight;
+            this.boundingBox.maxX = _this.x + _this.displayWidth;
+            this.boundingBox.maxY = _this.y + _this.displayHeight;
         };
 
         this.body.updateBoundingBox();
@@ -46,7 +46,7 @@ class Wanderer extends Phaser.GameObjects.Sprite
         this.velocity.y = Math.cos(angle * Phaser.Math.DEG_TO_RAD) * 5;
     }
 
-    update ()
+    preUpdate ()
     {
         this.x += this.velocity.x;
         this.y += this.velocity.y;
@@ -55,5 +55,3 @@ class Wanderer extends Phaser.GameObjects.Sprite
         this.body.updateBoundingBox();
     }
 }
-
-export default serialize(Wanderer);

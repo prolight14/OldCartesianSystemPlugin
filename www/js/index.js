@@ -1,8 +1,6 @@
 import Player from "./GameObjects/Player.js";
 import Wanderer from "./GameObjects/Wanderer.js";
 
-window.Player = Player;
-
 /**
  * This is just a test of the Cartesian System with Phaser 3 it's not an actual plugin yet...
  * Just a prototype
@@ -16,6 +14,12 @@ var config = {
     type: Phaser.CANVAS,
     width: 800,
     height: 480,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true,
+        }
+    },
     scene: {
         preload: preload,
         create: create,
@@ -24,6 +28,7 @@ var config = {
 };  
 
 var game = new Phaser.Game(config);
+window.game = game;
 
 var worldConfig = {
     camera: {
@@ -63,17 +68,18 @@ function create()
     this.csPlugin.setupWorld(worldConfig);
     var world = this.csPlugin.world;
 
-    var aa_players = world.add.gameObjectArray(Player, "player");
+    window.aa_players = world.add.gameObjectArray(Player);
 
     player = aa_players.add(this, 200, 200, "player");
-    window.player = player;
-
+  
     cam = this.cameras.main;
+    cam.setBounds(0, 0, 3990, 3990);
     cam.startFollow(player);
+    
     world.cam.setFocus(player.x, player.y, "player");
     world.cam.update();
 
-    var aa_wanderers = world.add.gameObjectArray(Wanderer, "Wanderer");
+    var aa_wanderers = world.add.gameObjectArray(Wanderer);
 
     for(var i = 0; i < 330; i++)
     {
@@ -84,6 +90,7 @@ function create()
 function update()
 {
     var world = this.csPlugin.world;
+
 
     world.cam.updateFocus(player.x, player.y);
     world.cam.update();
