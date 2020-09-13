@@ -1,0 +1,1 @@
+cp ./dist/CartesianSystemPlugin.js ./www/js/libraries

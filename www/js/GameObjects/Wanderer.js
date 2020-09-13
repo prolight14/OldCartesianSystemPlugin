@@ -1,15 +1,14 @@
-export default class Wanderer extends Phaser.GameObjects.Sprite
+export default class Wanderer extends Phaser.Physics.Arcade.Sprite
 {
     constructor (scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);
+        scene.physics.add.existing(this);
 
-        this.velocity = {
-            x: 0,
-            y: 0
-        };
+        this.setCollideWorldBounds(true);
+        this.setBounce(1, 1);
 
         this.changeTravelDirection();
 
@@ -23,35 +22,33 @@ export default class Wanderer extends Phaser.GameObjects.Sprite
 
         var _this = this;
 
-        if(!this.body) {this.body = {};}
-
-
         // Could be added in the cartesian system plugin
         this.body.boundingBox = {};
         this.body.updateBoundingBox = function()
         {
-            this.boundingBox.minX = _this.x - _this.displayWidth;
-            this.boundingBox.minY = _this.y - _this.displayHeight;
-            this.boundingBox.maxX = _this.x + _this.displayWidth;
-            this.boundingBox.maxY = _this.y + _this.displayHeight;
+            this.boundingBox.minX = _this.x - _this.displayWidth / 2;
+            this.boundingBox.minY = _this.y - _this.displayHeight / 2;
+            this.boundingBox.maxX = _this.x + _this.displayWidth / 2;
+            this.boundingBox.maxY = _this.y + _this.displayHeight / 2;
         };
 
         this.body.updateBoundingBox();
+
+        var lastPostUpdate = this.body.postUpdate;
+        this.body.postUpdate = function()
+        {
+            var toReturn = lastPostUpdate.apply(this, arguments);
+
+            _this.body.updateBoundingBox();
+            _this.onBodyPreUpdate();
+
+            return toReturn;
+        };
     }
 
     changeTravelDirection ()
     {
         var angle = Phaser.Math.Angle.RandomDegrees();
-        this.velocity.x = Math.sin(angle * Phaser.Math.DEG_TO_RAD) * 5;
-        this.velocity.y = Math.cos(angle * Phaser.Math.DEG_TO_RAD) * 5;
-    }
-
-    preUpdate ()
-    {
-        this.x += this.velocity.x;
-        this.y += this.velocity.y;
-
-        // Could be added in the cartesian system plugin
-        this.body.updateBoundingBox();
+        this.setVelocity(Math.sin(angle * Phaser.Math.DEG_TO_RAD) * 25, Math.cos(angle * Phaser.Math.DEG_TO_RAD) * 25);
     }
 }

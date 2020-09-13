@@ -4,7 +4,7 @@
     "description": "Phaser 3 Cartesian System Plugin",
     "main": "src/CartesianSystemPlugin.js",
     "scripts": {
-        "build": "webpack"
+        "build": "webpack && ./copyover.sh"
     },
     "repository": {
         "type": "git",

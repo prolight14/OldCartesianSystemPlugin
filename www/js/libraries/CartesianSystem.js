@@ -576,7 +576,29 @@ function GameObjectHandler()
                 object[key]();
 
                 // Refreshes the object's cell place after it has been moved 
-                if(object.body.moved)
+                if(object.body.moves)
+                {
+                    cameraGrid.removeRef(object);
+                    cameraGrid.addRef(object);
+                }
+            }
+        }
+    };
+
+    this.loopProcessList = function(cameraGrid, callback)
+    {
+        var i, j, object;
+
+        for(i in used)
+        {
+            for(j = 0; j < used[i].length; j++)
+            {
+                object = gameObjects[i][used[i][j]];
+
+                callback(object, gameObjects.references[i], used[i][j]);
+
+                // Refreshes the object's cell place after it has been moved 
+                if(object.body.moves)
                 {
                     cameraGrid.removeRef(object);
                     cameraGrid.addRef(object);
@@ -710,6 +732,16 @@ function World(config)
         );
 
         return this;
+    };
+
+    this.utils = {};
+    this.utils.loopProcessList = function(callback)
+    {
+        return gameObjectHandler.loopProcessList(cameraGrid, callback);
+    };
+    this.utils.resetProcessList = function()
+    {
+        gameObjectHandler.resetProcessList();
     };
 
     this.step = function()
@@ -867,9 +899,34 @@ function World(config)
 
         return this;
     };
+    this.grid.getCellFromCoordinates = function(col, row)
+    {
+        return cameraGrid.grid[col][row];
+    };
     this.grid.getCoordinates = function(x, y)
     {
         return cameraGrid.getCoors(x, y);
+    };
+    this.grid.getDimensions = function()
+    {
+        return {
+            cols: cameraGrid.cols,
+            rows: cameraGrid.rows,
+            cellWidth: cameraGrid.cellWidth,
+            cellHeight: cameraGrid.cellHeight
+        };
+    };
+    this.grid.getBounds = function()
+    {
+        var width = cameraGrid.cols * cameraGrid.cellWidth;
+        var height = cameraGrid.rows * cameraGrid.cellHeight;
+
+        return {
+            minX: 0,
+            minY: 0,
+            maxX: width,
+            maxY: height
+        };
     };
 
     this.cam = {};
@@ -1118,9 +1175,28 @@ function createAA(object, keypairs, arrayName)
             this.cache.tempId = id;
 
             this[id] = arguments[0];
-            this[id]._name = this.cache.tempName || this._name;
-            this[id]._arrayName = this._name;
-            this[id]._id = id;
+
+            Object.defineProperty(this[id], "_name", 
+            {
+                enumerable: false,
+                writable: true,
+                configurable: true,
+                value: this.cache.tempName || this._name
+            });
+            Object.defineProperty(this[id], "_arrayName", 
+            {
+                enumerable: false,
+                writable: true,
+                configurable: true,
+                value: this._name
+            });
+            Object.defineProperty(this[id], "_id", 
+            {
+                enumerable: false,
+                writable: true,
+                configurable: true,
+                value: id
+            });
             return this[id];
         };
     }

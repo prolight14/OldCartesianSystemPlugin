@@ -16,16 +16,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite
 
         var _this = this;
 
-        if(!this.body) {this.body = {};}
-
         // Could be added in the cartesian system plugin
         this.body.boundingBox = {};
         this.body.updateBoundingBox = function()
         {
-            this.boundingBox.minX = _this.x - _this.displayWidth;
-            this.boundingBox.minY = _this.y - _this.displayHeight;
-            this.boundingBox.maxX = _this.x + _this.displayWidth;
-            this.boundingBox.maxY = _this.y + _this.displayHeight;
+            this.boundingBox.minX = _this.x - _this.displayWidth / 2;
+            this.boundingBox.minY = _this.y - _this.displayHeight / 2;
+            this.boundingBox.maxX = _this.x + _this.displayWidth / 2;
+            this.boundingBox.maxY = _this.y + _this.displayHeight / 2;
         };
 
         this.body.updateBoundingBox();
@@ -35,11 +33,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite
     {
         if(this.keys.a.isDown)
         {
-            this.setVelocityX(-200);
+            this.setVelocityX(-300);
         }
         if(this.keys.d.isDown)
         {
-            this.setVelocityX(200);
+            this.setVelocityX(300);
         }
 
         if(!this.keys.a.isDown && !this.keys.d.isDown)
@@ -49,19 +47,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite
 
         if(this.keys.w.isDown)
         {
-            this.setVelocityY(-200);
+            this.setVelocityY(-300);
         }
         if(this.keys.s.isDown)
         {
-            this.setVelocityY(200);
+            this.setVelocityY(300);
         }
 
         if(!this.keys.w.isDown && !this.keys.s.isDown)
         {
             this.setVelocityY(0);
         }
-
-        // Could be added in the cartesian system plugin
-        this.body.updateBoundingBox();
     }
 }
