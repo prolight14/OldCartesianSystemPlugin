@@ -103,16 +103,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+// Todo: Keep as much stuff related to this in here as possible
 var CartesianSystemPlugin = function(scene)
 {
     this.scene = scene;
-
     this.systems = scene.sys;
-
-    // if(!scene.sys.settings.isBooted)
-    // {
-    //     scene.sys.event.once('boot', this.boot, this);
-    // }
 };
 
 CartesianSystemPlugin.register = function(PluginManager)
@@ -125,9 +120,6 @@ CartesianSystemPlugin.prototype = {
     {
         var eventEmitter = this.systems.events;
 
-        eventEmitter.on('start', this.start, this);
-        // eventEmitter.on('update', this.update, this);
-        eventEmitter.on('shutdown', this.shutdown, this);
         eventEmitter.on('destroy', this.destroy, this);
     },
 
@@ -147,24 +139,50 @@ CartesianSystemPlugin.prototype = {
 
         world.utils.loopProcessList(function(object, arrayName, id)
         {
-            // Could be added in the cartesian system plugin
-            object.body.updateBoundingBox();
-
             sys.displayList.add(object);
             sys.updateList.add(object);
         });
     },
 
-    start: function()
+    initGameObjects: function()
     {
         var sys = this.systems;
+        var world = this.world;
 
+        sys.updateList.getActive().forEach((gameObject) =>
+        {
+            if(gameObject.body === undefined)
+            {
+                return;
+            }
+
+            var lastPostUpdate = gameObject.body.postUpdate;
+            gameObject.body.postUpdate = function()
+            {
+                var toReturn = lastPostUpdate.apply(this, arguments);
+
+                gameObject.body.updateBoundingBox();
+                world.grid.refreshReferences(gameObject);
+    
+                return toReturn;
+            };
+        });
+
+        // Remove all thing to be processed so that we don't run into errors 
+        // that would happen if we processed everything in the world at once
         sys.displayList.removeAll();
         sys.updateList.removeAll();
     },
 
     updateCS: function()
     {
+        if(!this.initializedGameObjects)
+        {
+            this.initGameObjects();
+
+            this.initializedGameObjects = true;
+        }
+
         if(this.world === undefined)
         {
             console.warn("skipped");
@@ -176,12 +194,6 @@ CartesianSystemPlugin.prototype = {
         world.processOnscreen();
         this.integrate();
         world.utils.resetProcessList();
-
-    },
-
-    shutdown: function()
-    {
-
     },
 
     destroy: function()
@@ -190,6 +202,7 @@ CartesianSystemPlugin.prototype = {
 
         this.scene = undefined;
         this.world = undefined;
+        this.systems = undefined;
     }
 };
 

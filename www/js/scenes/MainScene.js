@@ -11,7 +11,7 @@ var worldConfig = {
         }
     },
     grid: {
-        cols: 5,
+        cols: 15,
         rows: 30,
         cell: {
             height: 270,
@@ -69,13 +69,11 @@ export default class MainScene extends Phaser.Scene
         window.aa_players = world.add.gameObjectArray(Player);
     
         player = aa_players.add(this, 200, 200, "player");
-    
+
         cam.startFollow(player);
 
         world.cam.setFocus(player.x, player.y, "player");
         world.cam.update();
-
-        
         //////////////////////////////////////////////////////
     
         var aa_wanderers = world.add.gameObjectArray(Wanderer);
@@ -85,7 +83,7 @@ export default class MainScene extends Phaser.Scene
             classType: Wanderer
         });
     
-        for(var i = 0; i < 230; i++)
+        for(var i = 0; i < 690; i++)
         {
             var wanderer = aa_wanderers.add(
                 this, 
@@ -93,10 +91,6 @@ export default class MainScene extends Phaser.Scene
                 Math.random() * (worldBounds.maxY - worldBounds.minY), 
                 "wanderer"
             );
-            wanderer.onBodyPreUpdate = function()
-            {
-                world.grid.refreshReferences(this);
-            };
             wanderersGroup.add(wanderer);
         }
 

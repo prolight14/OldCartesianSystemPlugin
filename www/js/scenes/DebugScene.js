@@ -69,18 +69,6 @@ export default class DebugScene extends Phaser.Scene
             this.cellGraphics.strokeRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
         });
 
-        var _this = this;
-        world.get.gameObjectArray("wanderer").forEach(function(wanderer)
-        {
-            var box = wanderer.body.boundingBox;
-            _this.cellGraphics.strokeRect(
-                box.minX,
-                box.minY,
-                box.maxX - box.minX,
-                box.maxY - box.minY
-            );
-        });
-
         var scroll = world.cam.getScroll();
 
         var coordinates = world.grid.getCoordinates(

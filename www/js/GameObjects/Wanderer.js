@@ -1,11 +1,10 @@
-export default class Wanderer extends Phaser.Physics.Arcade.Sprite
+import PhysicsSprite from "./PhysicsSprite.js"
+
+export default class Wanderer extends PhysicsSprite
 {
     constructor (scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
-
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
 
         this.setCollideWorldBounds(true);
         this.setBounce(1, 1);
@@ -19,31 +18,6 @@ export default class Wanderer extends Phaser.Physics.Arcade.Sprite
             startAt: Math.random() * 500,
             repeat: Infinity
         });
-
-        var _this = this;
-
-        // Could be added in the cartesian system plugin
-        this.body.boundingBox = {};
-        this.body.updateBoundingBox = function()
-        {
-            this.boundingBox.minX = _this.x - _this.displayWidth / 2;
-            this.boundingBox.minY = _this.y - _this.displayHeight / 2;
-            this.boundingBox.maxX = _this.x + _this.displayWidth / 2;
-            this.boundingBox.maxY = _this.y + _this.displayHeight / 2;
-        };
-
-        this.body.updateBoundingBox();
-
-        var lastPostUpdate = this.body.postUpdate;
-        this.body.postUpdate = function()
-        {
-            var toReturn = lastPostUpdate.apply(this, arguments);
-
-            _this.body.updateBoundingBox();
-            _this.onBodyPreUpdate();
-
-            return toReturn;
-        };
     }
 
     changeTravelDirection ()
