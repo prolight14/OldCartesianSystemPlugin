@@ -66,7 +66,7 @@ export default class MainScene extends Phaser.Scene
             worldBounds.maxY - worldBounds.minY
         );
 
-        window.aa_players = world.add.gameObjectArray(Player);
+        var aa_players = world.add.gameObjectArray(Player);
     
         player = aa_players.add(this, 200, 200, "player");
 
@@ -105,7 +105,7 @@ export default class MainScene extends Phaser.Scene
 
         var world = this.csPlugin.world;
         world.cam.updateFocus(player.x, player.y);
-    
+
         this.csPlugin.updateCS();
     }
 }

@@ -125,7 +125,10 @@ CartesianSystemPlugin.prototype = {
 
     setupWorld: function(config)
     {
-        return this.world = new CartesianSystem.World(config).init();
+        this.world = new CartesianSystem.World(config);
+        this.world.init();
+
+        return this.world;
     },
 
     // Heck this method might not even need to be called every frame as long as we update everything else in the csp
@@ -182,13 +185,7 @@ CartesianSystemPlugin.prototype = {
 
             this.initializedGameObjects = true;
         }
-
-        if(this.world === undefined)
-        {
-            console.warn("skipped");
-            return;
-        }
-        
+ 
         var world = this.world;
         world.cam.update();
         world.processOnscreen();
