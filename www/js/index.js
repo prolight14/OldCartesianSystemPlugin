@@ -1,4 +1,3 @@
-import CartesianSystemPlugin from "./plugins/CartesianSystemPlugin.js";
 import MainScene from "./scenes/MainScene.js";
 import DebugScene from "./scenes/DebugScene.js";
 
@@ -17,21 +16,8 @@ var config = {
     height: 480,
     physics: {
         default: 'arcade',
-        arcade: {
-            // debug: true,
-        }
+        arcade: {}
     },
-    // This is only temporary
-    // plugins: {
-    //     global: [
-    //         {
-    //             key: "CartesianSystemPlugin",
-    //             plugin: CartesianSystemPlugin,
-    //             start: true,
-    //             mapping: "csPlugin"  // member name in each scene instance, optional
-    //         }
-    //     ]
-    // },
     scene: [MainScene, DebugScene]
 };
 

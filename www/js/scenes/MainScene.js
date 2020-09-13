@@ -1,15 +1,13 @@
 import Player from "../GameObjects/Player.js";
 import Wanderer from "../GameObjects/Wanderer.js";
-import CartesianSystemPlugin from "../plugins/CartesianSystemPlugin.js";
 
-var n = 0;
 var worldConfig = {
     camera: {
         window: {
-            x: n,
-            y: 480 * n / 800,
-            width: 800 - n * 2,
-            height: 480 - (480 * n / 800) * 2
+            x: 0,
+            y: 0,
+            width: 800,
+            height: 480 
         }
     },
     grid: {
@@ -35,7 +33,6 @@ export default class MainScene extends Phaser.Scene
         // out what is wrong with it then I will come back to here and make it only for this scene
         this.load.scenePlugin({
             key: "CartesianSystemPlugin",
-            // url: CartesianSystemPlugin,
             url: "./js/libraries/CartesianSystemPlugin.js",
             sceneKey: 'csPlugin'
         });
@@ -102,18 +99,15 @@ export default class MainScene extends Phaser.Scene
             };
             wanderersGroup.add(wanderer);
         }
-    
-        // this.physics.add.collider(wanderersGroup, wanderersGroup);
-        // this.physics.add.collider(player, wanderersGroup);
+
         this.player = player;
-        this.cam = cam;
-    
+       
         this.scene.run("debug");
     }
 
     update ()
     {
-        let { player, cam } = this;
+        let { player } = this;
 
         var world = this.csPlugin.world;
         world.cam.updateFocus(player.x, player.y);
