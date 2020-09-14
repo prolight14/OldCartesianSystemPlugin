@@ -42,22 +42,32 @@ export default class PlayScene extends Phaser.Scene
                 varying vec2 outTexCoord;
                 varying vec4 outTint;
 
+                float size = 60.0 / uResolution.x;
+
                 vec4 night()
                 {
                     vec2 pixelPos = gl_FragCoord.xy / uResolution.xx;
                     vec2 light1Pos = uLight1.xy / uResolution.xx;
                     vec2 light2Pos = uLight2.xy / uResolution.xx;
 
-                    float dx = light1Pos.x - pixelPos.x;
-                    float dy = light1Pos.y - pixelPos.y;
+                    float dist1 = distance(pixelPos, light1Pos);
+                    float dist2 = distance(pixelPos, light2Pos);
 
-                    float dx2 = light2Pos.x - pixelPos.x;
-                    float dy2 = light2Pos.y - pixelPos.y;
+                    float n = 0.0;
 
-                    float n = 1.0 - sqrt(dx * dx + dy * dy) * 5.0;
-                    float n2 = 1.0 - sqrt(dx2 * dx2 + dy2 * dy2) * 5.0;
-
-                    return vec4(-1.0, -1.0, -1.0, 1.0) * vec4(n, n, n, 1.0) * vec4(n2, n2, n2, 1.0);
+                    if(dist1 < size && dist2 < size)
+                    {
+                        n = max(1.0 - dist1 / size, 1.0 - dist2 / size);
+                    }
+                    else if(dist1 < size)
+                    {
+                        n = 1.0 - dist1 / size;
+                    }
+                    else if(dist2 < size)
+                    {
+                        n = 1.0 - dist2 / size;
+                    }
+                    return vec4(n, n, n, 1.0);
                 }
 
                 void main()
@@ -70,20 +80,12 @@ export default class PlayScene extends Phaser.Scene
                 }
             `
         };
-
-        //colorOverlay(outTint, );
-        /*
-        
-        */
         this.pipelineInstance = new Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline(config);
         this.game.renderer.addPipeline('nighteffect', this.pipelineInstance);
 
         this.pipelineInstance.setFloat2('uResolution', 800, 480);
 
-        // this.cameras.main.setBackgroundColor('rgba(0, 0, 0, 0)');
-
         this.pipelineInstance.setFloat2("uLight2", Math.random() * 800, 480 - Math.random() * 480);
-
 
         this.cameras.main.setRenderToTexture('nighteffect', true);
 
