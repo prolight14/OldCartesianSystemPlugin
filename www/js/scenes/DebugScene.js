@@ -2,7 +2,9 @@ export default class DebugScene extends Phaser.Scene
 {
     constructor ()
     {
-        super("debug");
+        super({
+            key: "debug",
+        });
     }
 
     preload ()
@@ -54,7 +56,7 @@ export default class DebugScene extends Phaser.Scene
 
         var world = this.csPlugin.world;
 
-        this.fpsText.setText("Fps: " + (1000 / delta));
+        this.fpsText.setText("Fps: " + Math.floor(1000 / delta));
 
         this.cellGraphics.clear();
 
@@ -69,14 +71,14 @@ export default class DebugScene extends Phaser.Scene
             this.cellGraphics.strokeRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
         });
 
-        var scroll = world.cam.getScroll();
+        // var scroll = world.cam.getScroll();
 
-        var coordinates = world.grid.getCoordinates(
-            scroll.x - world.cam.getWindowWidth() / 2 + this.pointer.x, 
-            scroll.y - world.cam.getWindowHeight() / 2 + this.pointer.y
-        );
+        // var coordinates = world.grid.getCoordinates(
+        //     scroll.x - world.cam.getWindowWidth() / 2 + this.pointer.x, 
+        //     scroll.y - world.cam.getWindowHeight() / 2 + this.pointer.y
+        // );
 
-        var cell = world.grid.getCellFromCoordinates(coordinates.col, coordinates.row);
-        this.cellText.setText(coordinates.col + ", " + coordinates.row + "\n" + Object.keys(cell).join("\n"));
+        // var cell = world.grid.getCellFromCoordinates(coordinates.col, coordinates.row);
+        // this.cellText.setText(coordinates.col + ", " + coordinates.row + "\n" + Object.keys(cell).join("\n"));
     }
 }

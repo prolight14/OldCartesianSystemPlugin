@@ -1,5 +1,6 @@
 import MainScene from "./scenes/MainScene.js";
 import DebugScene from "./scenes/DebugScene.js";
+// import BackgroundScene from "./scenes/BackgroundScene.js";
 
 /**
  * This is just a test of the Cartesian System with Phaser 3 it's not an actual plugin yet...
@@ -11,14 +12,15 @@ import DebugScene from "./scenes/DebugScene.js";
  */
 
 var config = {
-    type: Phaser.CANVAS,
+    type: Phaser.WEBGL,
     width: 800,
     height: 480,
+    pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {}
     },
-    scene: [MainScene, DebugScene]
+    scene: [MainScene, DebugScene/*, BackgroundScene*/]
 };
 
 var game = new Phaser.Game(config);

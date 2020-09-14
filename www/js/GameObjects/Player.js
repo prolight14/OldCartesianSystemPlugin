@@ -15,17 +15,19 @@ export default class Player extends PhysicsSprite
             w: scene.input.keyboard.addKey('w'),
             s: scene.input.keyboard.addKey('s')
         };
+
+        this.setScale(32, 32);
     }
 
     preUpdate ()
     {
         if(this.keys.a.isDown)
         {
-            this.setVelocityX(-300);
+            this.setVelocityX(-500);
         }
         if(this.keys.d.isDown)
         {
-            this.setVelocityX(300);
+            this.setVelocityX(500);
         }
 
         if(!this.keys.a.isDown && !this.keys.d.isDown)
@@ -35,11 +37,11 @@ export default class Player extends PhysicsSprite
 
         if(this.keys.w.isDown)
         {
-            this.setVelocityY(-300);
+            this.setVelocityY(-500);
         }
         if(this.keys.s.isDown)
         {
-            this.setVelocityY(300);
+            this.setVelocityY(500);
         }
 
         if(!this.keys.w.isDown && !this.keys.s.isDown)

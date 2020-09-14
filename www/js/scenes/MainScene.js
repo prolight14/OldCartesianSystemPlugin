@@ -1,3 +1,5 @@
+// Note to self: Do not use Arcade Physics, either use MatterJs physics or no physics at all.
+
 import Player from "../GameObjects/Player.js";
 import Wanderer from "../GameObjects/Wanderer.js";
 
@@ -11,8 +13,8 @@ var worldConfig = {
         }
     },
     grid: {
-        cols: 15,
-        rows: 30,
+        cols: 5,
+        rows: 10,
         cell: {
             height: 270,
             width: 270
@@ -24,7 +26,9 @@ export default class MainScene extends Phaser.Scene
 {
     constructor ()
     {
-        super("main");
+        super({
+            key: "main",
+        });
     }
 
     preload ()
@@ -47,6 +51,17 @@ export default class MainScene extends Phaser.Scene
 
         this.csPlugin.setupWorld(worldConfig);
         var world = this.csPlugin.world;
+
+        world.grid.loopThroughAllCells(function(cell, col, row)
+        {
+            Object.defineProperty(cell, "starSeed",  
+            {
+                enumerable: false,
+                writable: true,
+                configurable: true,
+                value: Math.random()
+            });
+        });
     
         cam = this.cameras.main;
 
@@ -83,7 +98,7 @@ export default class MainScene extends Phaser.Scene
             classType: Wanderer
         });
     
-        for(var i = 0; i < 690; i++)
+        for(var i = 0; i < 690 / 6; i++)
         {
             var wanderer = aa_wanderers.add(
                 this, 
@@ -97,6 +112,9 @@ export default class MainScene extends Phaser.Scene
         this.player = player;
        
         this.scene.run("debug");
+        // this.scene.run("background");
+        
+        // this.scene.get("background").sendToBack();
     }
 
     update ()
@@ -107,5 +125,36 @@ export default class MainScene extends Phaser.Scene
         world.cam.updateFocus(player.x, player.y);
 
         this.csPlugin.updateCS();
+
+        this.starsLayer1();
     }
+
+    starsLayer1 ()
+    {
+        var world = this.csPlugin.world;
+
+        // var starGraphics = this.scene.get("background").starGraphics;
+
+        // starGraphics.clear();
+        // starGraphics.fillStyle(0xFFFFFF, 1);
+
+        // var dimensions = world.grid.getDimensions();
+        // var cellWidth = dimensions.cellWidth;
+        // var cellHeight = dimensions.cellHeight;
+
+        // world.grid.loopThroughVisibleCells(function(cell, col, row)
+        // {
+        //     var rng = new Phaser.Math.RandomDataGenerator("seed");
+
+        //     for(let i = 0; i < 120; i++)
+        //     {
+        //         starGraphics.fillRect(
+        //             Math.floor(col * cellWidth + cellWidth * rng.frac()), 
+        //             Math.floor(row * cellHeight + cellHeight * rng.frac()),
+        //             1, 
+        //             1
+        //         );
+        //     }
+        // });
+    }   
 }

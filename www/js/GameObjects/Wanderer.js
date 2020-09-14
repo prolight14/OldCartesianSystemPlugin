@@ -18,6 +18,9 @@ export default class Wanderer extends PhysicsSprite
             startAt: Math.random() * 500,
             repeat: Infinity
         });
+
+
+        this.setScale(32, 32);
     }
 
     changeTravelDirection ()
