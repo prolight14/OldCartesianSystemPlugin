@@ -108,6 +108,7 @@ var CartesianSystemPlugin = function(scene)
 {
     this.scene = scene;
     this.systems = scene.sys;
+    this.cameras = scene.cameras;
 };
 
 CartesianSystemPlugin.register = function(PluginManager)
@@ -145,6 +146,8 @@ CartesianSystemPlugin.prototype = {
             sys.displayList.add(object);
             sys.updateList.add(object);
         });
+
+        sys.displayList.queueDepthSort();
     },
 
     initGameObjects: function()
@@ -190,6 +193,7 @@ CartesianSystemPlugin.prototype = {
         world.cam.update();
         world.processOnscreen();
         this.integrate();
+
         world.utils.resetProcessList();
     },
 

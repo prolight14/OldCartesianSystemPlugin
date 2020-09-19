@@ -1,17 +1,20 @@
-export default class PhysicsSprite extends Phaser.Physics.Arcade.Sprite
+export default class PhysicsSprite extends Phaser.GameObjects.Sprite
 {
     constructor (scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
 
         scene.add.existing(this);
-        scene.physics.add.existing(this);
+        // scene.physics.add.existing(this);
 
-        this.setCollideWorldBounds(true);
+        // this.setCollideWorldBounds(true);
 
         var _this = this;
 
+        this.body = {};
+
         this.body.boundingBox = {};
+        this.body.moves = true;
         this.body.updateBoundingBox = function()
         {
             this.boundingBox.minX = _this.x - _this.displayWidth / 2;
@@ -21,5 +24,7 @@ export default class PhysicsSprite extends Phaser.Physics.Arcade.Sprite
         };
 
         this.body.updateBoundingBox();
+
+        this.body.postUpdate = function() {};
     }
 }

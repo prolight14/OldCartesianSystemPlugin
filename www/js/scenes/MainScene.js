@@ -13,11 +13,11 @@ var worldConfig = {
         }
     },
     grid: {
-        cols: 5,
-        rows: 10,
+        cols: 50,
+        rows: 100,
         cell: {
-            height: 270,
-            width: 270
+            height: 260,
+            width: 260
         }
     },
 };
@@ -52,17 +52,8 @@ export default class MainScene extends Phaser.Scene
         this.csPlugin.setupWorld(worldConfig);
         var world = this.csPlugin.world;
 
-        world.grid.loopThroughAllCells(function(cell, col, row)
-        {
-            Object.defineProperty(cell, "starSeed",  
-            {
-                enumerable: false,
-                writable: true,
-                configurable: true,
-                value: Math.random()
-            });
-        });
-    
+        this.prepareStarsLayer1();
+
         cam = this.cameras.main;
 
         var worldCamBounds = world.cam.getBounds();
@@ -74,12 +65,12 @@ export default class MainScene extends Phaser.Scene
         );
     
         var worldBounds = world.grid.getBounds();
-        this.physics.world.setBounds(
-            worldBounds.minX, 
-            worldBounds.minY, 
-            worldBounds.maxX - worldBounds.minX, 
-            worldBounds.maxY - worldBounds.minY
-        );
+        // this.physics.world.setBounds(
+        //     worldBounds.minX, 
+        //     worldBounds.minY, 
+        //     worldBounds.maxX - worldBounds.minX, 
+        //     worldBounds.maxY - worldBounds.minY
+        // );
 
         var aa_players = world.add.gameObjectArray(Player);
     
@@ -91,30 +82,31 @@ export default class MainScene extends Phaser.Scene
         world.cam.update();
         //////////////////////////////////////////////////////
     
-        var aa_wanderers = world.add.gameObjectArray(Wanderer);
+        // var aa_wanderers = world.add.gameObjectArray(Wanderer);
     
-        var wanderersGroup = this.add.group({
-            active: true,
-            classType: Wanderer
-        });
+        // var wanderersGroup = this.add.group({
+        //     active: true,
+        //     classType: Wanderer
+        // });
     
-        for(var i = 0; i < 690 / 6; i++)
-        {
-            var wanderer = aa_wanderers.add(
-                this, 
-                Math.random() * (worldBounds.maxX - worldBounds.minX), 
-                Math.random() * (worldBounds.maxY - worldBounds.minY), 
-                "wanderer"
-            );
-            wanderersGroup.add(wanderer);
-        }
+        // for(var i = 0; i < 23000; i++)
+        // {
+        //     var wanderer = aa_wanderers.add(
+        //         this, 
+        //         Math.random() * (worldBounds.maxX - worldBounds.minX), 
+        //         Math.random() * (worldBounds.maxY - worldBounds.minY), 
+        //         "wanderer"
+        //     );
+        //     wanderer.worldBounds = worldBounds;
+        //     wanderersGroup.add(wanderer);
+        // }
 
         this.player = player;
        
         this.scene.run("debug");
-        // this.scene.run("background");
-        
-        // this.scene.get("background").sendToBack();
+
+        this.scene.run("background");
+        this.scene.get("background").scene.sendToBack();
     }
 
     update ()
@@ -129,32 +121,55 @@ export default class MainScene extends Phaser.Scene
         this.starsLayer1();
     }
 
+    prepareStarsLayer1 ()
+    {
+        var world = this.csPlugin.world;
+        var rng = new Phaser.Math.RandomDataGenerator(["space1"]);
+
+        world.grid.loopThroughAllCells(function(cell, col, row)
+        {
+            Object.defineProperty(cell, "ss",  
+            {
+                enumerable: false,
+                writable: true,
+                configurable: true,
+                value: rng.between(0, 9999999)
+            });
+        });
+    }
+
     starsLayer1 ()
     {
         var world = this.csPlugin.world;
 
-        // var starGraphics = this.scene.get("background").starGraphics;
+        var starGraphics = this.scene.get("background").starGraphics;
 
-        // starGraphics.clear();
-        // starGraphics.fillStyle(0xFFFFFF, 1);
+        starGraphics.clear();
+        starGraphics.fillStyle(0xFFFFFF, 1);
 
-        // var dimensions = world.grid.getDimensions();
-        // var cellWidth = dimensions.cellWidth;
-        // var cellHeight = dimensions.cellHeight;
+        var dimensions = world.grid.getDimensions();
+        var cellWidth = dimensions.cellWidth;
+        var cellHeight = dimensions.cellHeight;
 
-        // world.grid.loopThroughVisibleCells(function(cell, col, row)
-        // {
-        //     var rng = new Phaser.Math.RandomDataGenerator("seed");
+        var x, y, i;
+        var RDG = Phaser.Math.RandomDataGenerator;
 
-        //     for(let i = 0; i < 120; i++)
-        //     {
-        //         starGraphics.fillRect(
-        //             Math.floor(col * cellWidth + cellWidth * rng.frac()), 
-        //             Math.floor(row * cellHeight + cellHeight * rng.frac()),
-        //             1, 
-        //             1
-        //         );
-        //     }
-        // });
+        world.grid.loopThroughVisibleCells((cell, col, row) =>
+        {
+            var rng = new RDG([cell.ss]);
+
+            x = col * cellWidth;
+            y = row * cellWidth;
+
+            for(i = 0; i < 120; i++)
+            {
+                starGraphics.fillRect(
+                    x + rng.between(0, cellWidth),
+                    y + rng.between(0, cellHeight),
+                    1,
+                    1
+                );
+            }
+        });
     }   
 }

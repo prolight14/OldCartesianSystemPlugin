@@ -14,6 +14,9 @@ export default class PlayScene extends Phaser.Scene
 
     create ()
     {
+        this.width = this.cameras.main.width;
+        this.height = this.cameras.main.height;
+
         this.nightGraphics = this.add.graphics();
 
         this.nightGraphics.lineStyle(3, 0xFF00FF, 0xFF);
@@ -22,14 +25,17 @@ export default class PlayScene extends Phaser.Scene
 
         this.nightGraphics.fillStyle(0x00FF9F, 1.0);
 
+        var rng = new Phaser.Math.RandomDataGenerator("seed");
+
         for(var i = 0; i < 30; i++)
         {
-            this.nightGraphics.fillRect(Phaser.Math.Between(0, 800) - 12, Phaser.Math.Between(0, 480) - 12, 24, 24);
+            this.nightGraphics.fillEllipse(rng.frac() * this.width - 12, rng.frac() * this.height - 12, 24, 24);
         }
 
         var config = {
             game: this.game,
             renderer: this.game.renderer,
+
             fragShader: `
                 precision mediump float;
 
@@ -37,12 +43,12 @@ export default class PlayScene extends Phaser.Scene
                 uniform vec2 uResolution;
                 uniform vec2 uLight1;
                 uniform vec2 uLight2;
-                uniform float uTime;
-
+            
                 varying vec2 outTexCoord;
                 varying vec4 outTint;
 
-                float size = 60.0 / uResolution.x;
+                float size = 120.0 / uResolution.x;
+                float sizeSq = size * size;
 
                 vec4 night()
                 {
@@ -50,22 +56,27 @@ export default class PlayScene extends Phaser.Scene
                     vec2 light1Pos = uLight1.xy / uResolution.xx;
                     vec2 light2Pos = uLight2.xy / uResolution.xx;
 
-                    float dist1 = distance(pixelPos, light1Pos);
-                    float dist2 = distance(pixelPos, light2Pos);
+                    float dx = pixelPos.x - light1Pos.x;
+                    float dy = pixelPos.y - light1Pos.y;
+                    float distSq = dx * dx + dy * dy;
+
+                    float dx2 = pixelPos.x - light2Pos.x;
+                    float dy2 = pixelPos.y - light2Pos.y;
+                    float dist2Sq = dx2 * dx2 + dy2 * dy2;
 
                     float n = 0.0;
 
-                    if(dist1 < size && dist2 < size)
+                    if(distSq < sizeSq && dist2Sq < sizeSq)
                     {
-                        n = max(1.0 - dist1 / size, 1.0 - dist2 / size);
+                        n = max(1.0 - sqrt(distSq) / size, 1.0 - sqrt(dist2Sq) / size);
                     }
-                    else if(dist1 < size)
+                    else if(distSq < sizeSq)
                     {
-                        n = 1.0 - dist1 / size;
+                        n = 1.0 - sqrt(distSq) / size;
                     }
-                    else if(dist2 < size)
+                    else if(dist2Sq < sizeSq)
                     {
-                        n = 1.0 - dist2 / size;
+                        n = 1.0 - sqrt(dist2Sq) / size;
                     }
                     return vec4(n, n, n, 1.0);
                 }
@@ -79,36 +90,19 @@ export default class PlayScene extends Phaser.Scene
                     gl_FragColor = texture * night();
                 }
             `
+
         };
         this.pipelineInstance = new Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline(config);
         this.game.renderer.addPipeline('nighteffect', this.pipelineInstance);
-
-        this.pipelineInstance.setFloat2('uResolution', 800, 480);
-
-        this.pipelineInstance.setFloat2("uLight2", Math.random() * 800, 480 - Math.random() * 480);
-
+        this.pipelineInstance.setFloat2('uResolution', this.width, this.height);
+        
+        this.pipelineInstance.setFloat2("uLight2", Math.random() * this.width, this.height - Math.random() * this.height);
         this.cameras.main.setRenderToTexture('nighteffect', true);
-
-        this.pointer = {
-            x: 800 * 0.5,
-            y: 480 * 0.5
-        };
-
-        let updatePointer = (pointer) =>
-        {
-            this.pointer.x = Math.floor(pointer.x);
-            this.pointer.y = Math.floor(pointer.y);
-        };
-
-        this.input.on("pointerdown", updatePointer);
-        this.input.on("pointerup", updatePointer);
-        this.input.on("pointermove", updatePointer);
     }
 
     update (time, delta)
     {
-        this.pipelineInstance.setFloat1('uTime', time * 0.001);
-
-        this.pipelineInstance.setFloat2("uLight1", this.pointer.x, 480 - this.pointer.y);
+        var activePointer = this.input.activePointer;
+        this.pipelineInstance.setFloat2("uLight1", activePointer.x, this.height - activePointer.y);
     }
 }
