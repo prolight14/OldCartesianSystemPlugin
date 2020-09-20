@@ -28,10 +28,11 @@ export default class UIDebugScene extends Phaser.Scene
         var mainScene = this.scene.get("main");
         var world = mainScene.csPlugin.world;
         var scroll = world.cam.getScroll();
+        var mainSceneCam = this.scene.get("main").cameras.main;
 
         var coordinates = world.grid.getCoordinates(
-            scroll.x - world.cam.getWindowWidth() / 2 + this.input.activePointer.x, 
-            scroll.y - world.cam.getWindowHeight() / 2 + this.input.activePointer.y
+            scroll.x - world.cam.getWindowWidth() / 2 + this.input.activePointer.x / mainSceneCam.zoom, 
+            scroll.y - world.cam.getWindowHeight() / 2 + this.input.activePointer.y / mainSceneCam.zoom
         );
 
         var cell = world.grid.getCellFromCoordinates(coordinates.col, coordinates.row);

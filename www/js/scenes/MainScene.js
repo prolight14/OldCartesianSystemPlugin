@@ -48,21 +48,25 @@ export default class MainScene extends Phaser.Scene
         this.setupCamera();
         this.setupScenes();
 
-        // this.input.keyboard.on('keydown', (event) =>
-        // {
-        //     if(['-', '_'].indexOf(event.key) !== -1)
-        //     {
-        //         this.setCameraZoom(0.3);
-        //     }
-        //     else if(['=', '+'].indexOf(event.key) !== -1)
-        //     {
-        //         this.setCameraZoom(1.7);
-        //     }
-        //     else if(event.key === '0')
-        //     {
-        //         this.setCameraZoom(1.0);
-        //     }
-        // });
+        var cam = this.cameras.main;
+
+        this.input.keyboard.on('keyup', (event) =>
+        {
+            let step = 0.03;
+
+            if(['-', '_'].indexOf(event.key) !== -1)
+            {
+                this.setCameraZoom(Math.max(cam.zoom - step, 0.25));
+            }
+            else if(['=', '+'].indexOf(event.key) !== -1)
+            {
+                this.setCameraZoom(Math.min(cam.zoom + step, 1.75));
+            }
+            else if(event.key === '0')
+            {
+                this.setCameraZoom(1.0);
+            }
+        });
     }
 
     setupWorldCameraFocus ()
@@ -90,9 +94,6 @@ export default class MainScene extends Phaser.Scene
             worldCamBounds.maxX - worldCamBounds.minX, 
             worldCamBounds.maxY - worldCamBounds.minY
         );
-
-        world.cam.defaultBounds = worldCamBounds;
-
         world.cam.defaultWindow = world.cam.getWindow();
 
         this.setCameraZoom(1);
@@ -103,42 +104,18 @@ export default class MainScene extends Phaser.Scene
         var world = this.csPlugin.world;
         var cam = this.cameras.main;
 
-        // var worldCamBounds = this.csPlugin.world.cam.getBounds();
-
-        // var boundsMinX = worldCamBounds.minX * zoom;
-        // var boundsMinY = worldCamBounds.minY * zoom;
-        // var boundsWidth = (worldCamBounds.maxX - worldCamBounds.minX) * zoom;
-        // var boundsHeight = (worldCamBounds.maxY - worldCamBounds.minY) * zoom;
-
-        // cam.setBounds(
-        //     boundsMinX, 
-        //     boundsMinY, 
-        //     boundsWidth, 
-        //     boundsHeight
-        // );
-        // this.csPlugin.world.cam.setBounds(  
-        //     boundsMinX, 
-        //     boundsMinY, 
-        //     boundsMinX + boundsWidth,
-        //     boundsMinY + boundsHeight
-        // );
-
         cam.setZoom(zoom);
 
-        var invertedZoom = 1 / zoom;
-      
         var defaultWindow = world.cam.defaultWindow;
         
-        var derivedCamWindowWidth = defaultWindow.width * invertedZoom;
-        var derivedCamWindowHeight = defaultWindow.height * invertedZoom;
+        var derivedCamWindowWidth = defaultWindow.width / zoom;
+        var derivedCamWindowHeight = defaultWindow.height / zoom;
         this.csPlugin.world.cam.setWindow(
             defaultWindow.x - (derivedCamWindowWidth - defaultWindow.width) / 2, 
             defaultWindow.y - (derivedCamWindowHeight - defaultWindow.height) / 2, 
             derivedCamWindowWidth,
             derivedCamWindowHeight
         );
-
-        this.csPlugin.world.cam.updateBoundingBox();
     }
 
     setupScenes ()
