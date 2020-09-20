@@ -1,7 +1,4 @@
-// Note to self: Do not use Arcade Physics, either use MatterJs physics or no physics at all.
-
 import Player from "../GameObjects/Player.js";
-import Wanderer from "../GameObjects/Wanderer.js";
 
 var worldConfig = {
     camera: {
@@ -63,7 +60,7 @@ export default class MainScene extends Phaser.Scene
 
         cam.startFollow(this.player);
        
-        this.scene.run("debug");
+        // this.scene.run("debug");
         this.scene.run("background"); 
         this.scene.sendToBack("background");
     }
