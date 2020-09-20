@@ -17,6 +17,7 @@ export default class MainScene extends Phaser.Scene
         var mainSceneCam = this.scene.get("main").cameras.main;
         this.cameras.main.setScroll(mainSceneCam.scrollX, mainSceneCam.scrollY);
         this.cameras.main.setZoom(mainSceneCam.zoom);
+        this.cameras.main.setRotation(mainSceneCam.rotation);
 
         this.drawStars();
     }

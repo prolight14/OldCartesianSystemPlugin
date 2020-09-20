@@ -67,6 +67,22 @@ export default class MainScene extends Phaser.Scene
                 this.setCameraZoom(1.0);
             }
         });
+
+        this.arrowKeys = this.input.keyboard.createCursorKeys();
+    }
+
+    cameraRotationControls ()
+    {
+        var cam = this.cameras.main;
+
+        if(this.arrowKeys.left.isDown)
+        {
+            cam.setRotation(cam.rotation + Math.PI * 0.02);
+        }
+        if(this.arrowKeys.right.isDown)
+        {
+            cam.setRotation(cam.rotation - Math.PI * 0.02);
+        }
     }
 
     setupWorldCameraFocus ()
@@ -131,5 +147,7 @@ export default class MainScene extends Phaser.Scene
         this.csPlugin.world.cam.updateFocus(this.player.x, this.player.y);
 
         this.csPlugin.updateCS();
+
+        this.cameraRotationControls();
     }   
 }
