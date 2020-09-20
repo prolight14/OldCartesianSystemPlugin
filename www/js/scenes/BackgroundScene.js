@@ -5,11 +5,6 @@ export default class MainScene extends Phaser.Scene
         super("background");
     }
 
-    preload ()
-    {
-
-    }
-
     create ()
     {
         this.starGraphics = this.add.graphics();
@@ -21,6 +16,7 @@ export default class MainScene extends Phaser.Scene
     {
         var mainSceneCam = this.scene.get("main").cameras.main;
         this.cameras.main.setScroll(mainSceneCam.scrollX, mainSceneCam.scrollY);
+        this.cameras.main.setZoom(mainSceneCam.zoom);
 
         this.drawStars();
     }

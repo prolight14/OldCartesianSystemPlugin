@@ -252,6 +252,13 @@ Camera.prototype.scroll = function(x, y, name)
     this.boundingBox.maxX = this.scrollX + this.halfWindowWidth;
     this.boundingBox.maxY = this.scrollY + this.halfWindowHeight;
 };
+Camera.prototype.updateBoundingBox = function()
+{
+    this.boundingBox.minX = this.scrollX - this.halfWindowWidth;
+    this.boundingBox.minY = this.scrollY - this.halfWindowHeight;
+    this.boundingBox.maxX = this.scrollX + this.halfWindowWidth;
+    this.boundingBox.maxY = this.scrollY + this.halfWindowHeight;
+};
 Camera.prototype.resize = function(windowX, windowY, windowWidth, windowHeight)
 {
     this.windowX = windowX;
@@ -964,7 +971,19 @@ function World(config)
     };
     this.cam.getBounds = function()
     {
-        return camera.bounds;
+        return {
+            minX: camera.bounds.minX,
+            minY: camera.bounds.minY,
+            maxX: camera.bounds.maxX,
+            maxY: camera.bounds.maxY
+        };
+    };
+    this.cam.setBounds = function(minX, minY, maxX, maxY)
+    {
+        camera.bounds.minX = minX;
+        camera.bounds.minY = minY;
+        camera.bounds.maxX = maxX;
+        camera.bounds.maxY = maxY;
     };
     this.cam.getWindow = function()
     {
@@ -1008,12 +1027,22 @@ function World(config)
     this.cam.setWindowWidth = function(width)
     {
         camera.windowWidth = width;
+        camera.halfWindowWidth = width / 2;
         return this;
     };
     this.cam.setWindowHeight = function(height)
     {
         camera.windowHeight = height;
+        camera.halfWindowHeight = height / 2;
         return this;
+    };
+    this.cam.setWindow = function(x, y, width, height)
+    {
+        camera.resize(x, y, width, height);
+    };
+    this.cam.updateBoundingBox = function()
+    {
+        camera.updateBoundingBox();
     };
 
     // DEV only!

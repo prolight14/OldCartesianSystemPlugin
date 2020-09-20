@@ -1,5 +1,6 @@
 import MainScene from "./scenes/MainScene.js";
 import DebugScene from "./scenes/DebugScene.js";
+import UIDebugScene from "./scenes/UIDebugScene.js";
 import BackgroundScene from "./scenes/BackgroundScene.js";
 
 /**
@@ -19,7 +20,7 @@ var config = {
         target: 30,
         forceSetTimeOut: true
     },
-    scene: [MainScene, DebugScene, BackgroundScene]
+    scene: [MainScene, UIDebugScene, DebugScene, BackgroundScene]
 };
 
 var game = new Phaser.Game(config);
