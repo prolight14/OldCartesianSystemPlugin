@@ -2,9 +2,7 @@ export default class DebugScene extends Phaser.Scene
 {
     constructor ()
     {
-        super({
-            key: "debug",
-        });
+        super("debug");
     }
 
     preload ()
@@ -17,15 +15,12 @@ export default class DebugScene extends Phaser.Scene
         var world = (this.csPlugin = this.scene.get("main").csPlugin).world;
 
         this.cellGraphics = this.add.graphics();
-
-        this.debugGraphics = this.add.graphics();
-        this.debugGraphics.setScrollFactor(0);
-
+        
+        this.debugGraphics = this.add.graphics().setScrollFactor(0);
         this.debugGraphics.lineStyle(4, 0x00ff00, 1);
 
-        var camWindow = world.cam.getWindow();
-
-        this.debugGraphics.strokeRect(camWindow.x, camWindow.y, camWindow.width, camWindow.height);
+        // var camWindow = world.cam.getWindow();
+        // this.debugGraphics.strokeRect(camWindow.x, camWindow.y, camWindow.width, camWindow.height);
 
         this.fpsText = this.add.text(24, 24, "Fps: 60").setScrollFactor(0);
         this.cellText = this.add.text(24, 300, "").setScrollFactor(0);
@@ -40,18 +35,18 @@ export default class DebugScene extends Phaser.Scene
 
         this.fpsText.setText("Fps: " + Math.floor(1000 / delta));
 
-        // this.cellGraphics.clear();
+        this.cellGraphics.clear();
 
-        // this.cellGraphics.lineStyle(4, 0x00ff00, 1);
+        this.cellGraphics.lineStyle(4, 0x00ff00, 1);
 
-        // var dimensions = world.grid.getDimensions();
-        // var cellWidth = dimensions.cellWidth;
-        // var cellHeight = dimensions.cellHeight;
+        var dimensions = world.grid.getDimensions();
+        var cellWidth = dimensions.cellWidth;
+        var cellHeight = dimensions.cellHeight;
 
-        // world.grid.loopThroughVisibleCells((cell, col, row) =>
-        // {
-        //     this.cellGraphics.strokeRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
-        // });
+        world.grid.loopThroughVisibleCells((cell, col, row) =>
+        {
+            this.cellGraphics.strokeRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+        });
 
         // var scroll = world.cam.getScroll();
 

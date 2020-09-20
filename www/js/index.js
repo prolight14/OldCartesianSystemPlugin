@@ -7,8 +7,7 @@ import BackgroundScene from "./scenes/BackgroundScene.js";
  * Just a prototype
  *
  * Also, I just realized I can't use arcade physics for space related stuff. I have to use MatterJs.
- * 
- * Also I either have to use `setActive(bool)` or modify the `updateList` and `displayList`
+ *
  */
 
 var config = {
@@ -20,13 +19,11 @@ var config = {
         target: 30,
         forceSetTimeOut: true
     },
-    // p,hysics: {
-    //     default: 'arcade',
-    //     arcade: {}
-    // },
     scene: [MainScene, DebugScene, BackgroundScene]
 };
 
 var game = new Phaser.Game(config);
+
+// Debug/Dev only
 window.game = game;
 window.config = config;
