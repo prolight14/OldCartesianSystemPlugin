@@ -1,3 +1,6 @@
+// Todo?: Make this a class I can instantiate for multiple star layers
+// If I can just purely works with out running into any problems then I can get A LOT done.
+
 export default class StarLayerScene extends Phaser.Scene 
 {
     constructor ()
@@ -16,6 +19,15 @@ export default class StarLayerScene extends Phaser.Scene
 
     create ()
     {
+        var gridConfig = {
+            cols: 24,
+            rows: 30,
+            cell: {
+                width: 260,
+                height: 260
+            }
+        };
+
         this.csStars.setupWorld({
             camera: {
                 window: {
@@ -25,19 +37,75 @@ export default class StarLayerScene extends Phaser.Scene
                     height: this.game.config.height
                 }
             },
-            grid: {
-                cols: 24,
-                rows: 30,
-                cell: {
-                    height: 300,
-                    width: 300
-                }
-            },
+            grid: gridConfig
         });
+
+        this.createStars();
+
+        let world = this.csStars.world;
+
+        var player = this.scene.get("main").player;
+        world.cam.setFocus(player.x, player.y, "player");
+        world.cam.update();
+
+        this.cameras.main.startFollow(player);
+
+        this.cameras.main.setBounds(0, 0, gridConfig.cols * gridConfig.cell.width, gridConfig.rows * gridConfig.cell.height);
     }
 
     update ()
     {
-        
+        let world = this.csStars.world;
+
+        var player = this.scene.get("main").player;
+        world.cam.updateFocus(player.x, player.y);
+        world.cam.update();
+
+        this.renderStars();
+    }
+
+    createStars ()
+    {   
+        this.starLayer = this.add.graphics();
+
+        let world = this.csStars.world;
+
+        let rng = new Phaser.Math.RandomDataGenerator(["starLayer1"]);
+
+        world.grid.loopThroughAllCells((cell, col, row) =>
+        {
+            Object.defineProperty(cell, "ss", 
+            {
+                configurable: true,
+                enumerable: false,
+                writable: true,
+                value: rng.integer()
+            });
+        });
+    }
+
+    renderStars ()
+    {
+        this.starLayer.clear();
+        this.starLayer.fillStyle(0xFFFFFF);
+
+        let world = this.csStars.world;
+
+        let rng, i, x, y;
+
+        let { cellWidth, cellHeight } = world.grid.getDimensions();
+
+        world.grid.loopThroughVisibleCells((cell, col, row) =>
+        {
+            rng = new Phaser.Math.RandomDataGenerator([cell.ss]);
+
+            x = col * cellWidth;
+            y = row * cellHeight;
+
+            for(i = 0; i < 100; i++)
+            {
+                this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), 2, 2);
+            }
+        });
     }
 }
