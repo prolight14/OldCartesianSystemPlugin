@@ -49,8 +49,8 @@ export default class StarLayerScene extends Phaser.Scene
         world.cam.update();
 
         this.cameras.main.startFollow(player);
-
         this.cameras.main.setBounds(0, 0, gridConfig.cols * gridConfig.cell.width, gridConfig.rows * gridConfig.cell.height);
+        this.lastMscZoom = this.scene.get("main").cameras.main.zoom;
     }
 
     update ()
@@ -60,6 +60,19 @@ export default class StarLayerScene extends Phaser.Scene
         var player = this.scene.get("main").player;
         world.cam.updateFocus(player.x, player.y);
         world.cam.update();
+
+        let mscZoom = this.scene.get("main").cameras.main.zoom;
+
+        if(mscZoom !== this.lastMSCZoom)
+        {
+            this.cameras.main.setZoom(mscZoom);
+
+            var _window = this.scene.get("main").csPlugin.world.cam.getWindow();
+
+            world.cam.setWindow(_window.x, _window.y, _window.width, _window.height);
+        }
+
+        this.lastMSCZoom = mscZoom;
 
         this.renderStars();
     }
@@ -102,7 +115,7 @@ export default class StarLayerScene extends Phaser.Scene
             x = col * cellWidth;
             y = row * cellHeight;
 
-            for(i = 0; i < 100; i++)
+            for(i = 0; i < 34; i++)
             {
                 this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), 2, 2);
             }
