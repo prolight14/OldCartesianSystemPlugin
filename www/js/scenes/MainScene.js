@@ -120,8 +120,8 @@ export default class MainScene extends Phaser.Scene
     {
         this.scene.run("UIDebug");
         // this.scene.run("debug");
-        this.scene.run("background");
-        this.scene.sendToBack("background");
+        this.scene.run("starLayer");
+        this.scene.sendToBack("starLayer");
     }
 
     update ()

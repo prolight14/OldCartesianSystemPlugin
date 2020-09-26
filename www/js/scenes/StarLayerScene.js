@@ -1,8 +1,8 @@
-export default class MainScene extends Phaser.Scene 
+export default class StarLayerScene extends Phaser.Scene 
 {
     constructor ()
     {
-        super("background");
+        super("starLayer");
     }
 
     preload ()
