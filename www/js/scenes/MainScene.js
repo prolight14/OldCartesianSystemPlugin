@@ -122,6 +122,8 @@ export default class MainScene extends Phaser.Scene
         // this.scene.run("debug");
         this.scene.run("starLayer");
         this.scene.sendToBack("starLayer");
+        this.scene.run("starLayer2");
+        this.scene.sendToBack("starLayer2");
     }
 
     update ()

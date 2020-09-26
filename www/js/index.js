@@ -2,6 +2,7 @@ import MainScene from "./scenes/MainScene.js";
 import DebugScene from "./scenes/DebugScene.js";
 import UIDebugScene from "./scenes/UIDebugScene.js";
 import StarLayerScene from "./scenes/StarLayerScene.js";
+import StarLayer2Scene from "./scenes/StarLayer2Scene.js";
 
 /**
  * This is just a test of the Cartesian System with Phaser 3 it's not an actual plugin yet...
@@ -20,7 +21,7 @@ var config = {
         target: 30,
         forceSetTimeOut: true
     },
-    scene: [MainScene, UIDebugScene, DebugScene, StarLayerScene]
+    scene: [MainScene, UIDebugScene, DebugScene, StarLayerScene, StarLayer2Scene]
 };
 
 var game = new Phaser.Game(config);
