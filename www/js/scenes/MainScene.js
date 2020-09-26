@@ -2,25 +2,6 @@
 
 import Player from "../GameObjects/Player.js";
 
-var worldConfig = {
-    camera: {
-        window: {
-            x: 0,
-            y: 0,
-            width: 800,
-            height: 480 
-        }
-    },
-    grid: {
-        cols: 24,
-        rows: 30,
-        cell: {
-            height: 260,
-            width: 260
-        }
-    },
-};
-
 export default class MainScene extends Phaser.Scene 
 {
     constructor ()
@@ -42,7 +23,24 @@ export default class MainScene extends Phaser.Scene
 
     create ()
     {
-        this.csPlugin.setupWorld(worldConfig);
+        this.csPlugin.setupWorld({
+            camera: {
+                window: {
+                    x: 0,
+                    y: 0,
+                    width: this.game.config.width,
+                    height: this.game.config.height
+                }
+            },
+            grid: {
+                cols: 24,
+                rows: 30,
+                cell: {
+                    height: 260,
+                    width: 260
+                }
+            },
+        });
 
         this.setupWorldCameraFocus();
         this.setupCamera();
@@ -103,7 +101,7 @@ export default class MainScene extends Phaser.Scene
     {
         var world = this.csPlugin.world;
         var cam = this.cameras.main;
-
+        
         cam.setZoom(zoom);
 
         var defaultWindow = world.cam.defaultWindow;
@@ -121,7 +119,7 @@ export default class MainScene extends Phaser.Scene
     setupScenes ()
     {
         this.scene.run("UIDebug");
-        this.scene.run("debug");
+        // this.scene.run("debug");
         this.scene.run("background");
         this.scene.sendToBack("background");
     }

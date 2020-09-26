@@ -5,28 +5,95 @@ export default class MainScene extends Phaser.Scene
         super("background");
     }
 
+    preload ()
+    {
+        this.load.scenePlugin({
+            key: "CartesianSystemPlugin",
+            url: "./js/libraries/CartesianSystemPlugin.js",
+            sceneKey: 'csStars'
+        });
+    }
+
     create ()
     {
-        this.starGraphics = this.add.graphics();
+        this.csStars.setupWorld({
+            camera: {
+                window: {
+                    x: 0,
+                    y: 0,
+                    width: this.game.config.width,
+                    height: this.game.config.height
+                }
+            },
+            grid: {
+                cols: 24,
+                rows: 30,
+                cell: {
+                    height: 300,
+                    width: 300
+                }
+            },
+        });
+
+        this.updateWorldCamera();
+
+        // this.starLayer1 = this.add.graphics();
+        this.starLayer2 = this.add.graphics();
 
         this.prepareStarSeeds();
     }
 
+    updateWorldCamera ()
+    {
+        var starWorld = this.csStars.world;
+        var camFocus = this.scene.get("main").csPlugin.world.cam.getFocus();
+        starWorld.cam.setFocus(camFocus.x * 0.7, camFocus.y * 0.7, "otherCamera");
+        starWorld.cam.update();
+    }
+
     update ()
     {
+        var starWorld = this.csStars.world;
         var mainSceneCam = this.scene.get("main").cameras.main;
-        this.cameras.main.setScroll(mainSceneCam.scrollX, mainSceneCam.scrollY);
-        this.cameras.main.setZoom(mainSceneCam.zoom);
+        var cam = this.cameras.main;
+        // cam.setScroll(mainSceneCam.scrollX, mainSceneCam.scrollY);
+        cam.setZoom(mainSceneCam.zoom);
+
+        this.updateWorldCamera();
+
+        var scroll = starWorld.cam.getScroll();
+        cam.setScroll(
+            scroll.x - (starWorld.cam.getWindowWidth() * 0.5 + starWorld.cam.getWindowX()), 
+            scroll.y - (starWorld.cam.getWindowHeight() * 0.5 + starWorld.cam.getWindowY())
+        );
 
         this.drawStars();
     }
 
     prepareStarSeeds ()
     {
-        var world = this.scene.get("main").csPlugin.world;
         var rng = new Phaser.Math.RandomDataGenerator(["space1"]);
 
-        world.grid.loopThroughAllCells(function(cell, col, row)
+        // 1
+
+        // var world = this.scene.get("main").csPlugin.world;
+
+        // world.grid.loopThroughAllCells(function(cell)
+        // {
+        //     Object.defineProperty(cell, "ss",  
+        //     {
+        //         enumerable: false,
+        //         writable: true,
+        //         configurable: true,
+        //         value: rng.between(0, 9999999)
+        //     });
+        // });
+
+        // 2
+
+        var starWorld = this.csStars.world;
+
+        starWorld.grid.loopThroughAllCells(function(cell)
         {
             Object.defineProperty(cell, "ss",  
             {
@@ -42,32 +109,68 @@ export default class MainScene extends Phaser.Scene
     {
         var world = this.scene.get("main").csPlugin.world;
 
-        var starGraphics = this.starGraphics;
+        // 1
 
-        starGraphics.clear();
-        starGraphics.fillStyle(0xFFFFFF, 1);
+        // var starLayer1 = this.starLayer1;
+        // starLayer1.clear();
+        // starLayer1.fillStyle(0xFFFFFF, 1);
 
-        var dimensions = world.grid.getDimensions();
-        var cellWidth = dimensions.cellWidth;
-        var cellHeight = dimensions.cellHeight;
+        // 2
 
-        var x, y, i;
+        var starLayer2 = this.starLayer2;
+        starLayer2.clear();
+        starLayer2.fillStyle(0xFFFFFF, 1);
+
+        var rng, x, y, i;
+        var dimensions, cellWidth, cellHeight;
         var RDG = Phaser.Math.RandomDataGenerator;
 
-        world.grid.loopThroughVisibleCells((cell, col, row) =>
+        // 1
+
+        // dimensions = world.grid.getDimensions();
+        // cellWidth = dimensions.cellWidth;
+        // cellHeight = dimensions.cellHeight;
+
+        // world.grid.loopThroughVisibleCells((cell, col, row) =>
+        // {
+        //     rng = new RDG([cell.ss]);
+
+        //     x = col * cellWidth;
+        //     y = row * cellHeight;
+
+        //     for(i = 0; i < 8; i++)
+        //     {
+        //         starLayer1.fillRect(
+        //             x + rng.between(0, cellWidth),
+        //             y + rng.between(0, cellHeight),
+        //             2,
+        //             2
+        //         );
+        //     }
+        // });
+
+        // 2
+
+        var starWorld = this.csStars.world;
+
+        dimensions = starWorld.grid.getDimensions();
+        cellWidth = dimensions.cellWidth;
+        cellHeight = dimensions.cellHeight;
+
+        starWorld.grid.loopThroughVisibleCells((cell, col, row) =>
         {
-            var rng = new RDG([cell.ss]);
+            rng = new RDG([cell.ss]);
 
             x = col * cellWidth;
             y = row * cellHeight;
 
-            for(i = 0; i < 13; i++)
+            for(i = 0; i < 8; i++)
             {
-                starGraphics.fillRect(
+                starLayer2.fillRect(
                     x + rng.between(0, cellWidth),
                     y + rng.between(0, cellHeight),
-                    2,
-                    2
+                    3,
+                    3
                 );
             }
         });
