@@ -1,3 +1,5 @@
+import CameraShadow from "../GameObjects/CameraShadow.js";
+
 export default class StarLayer2Scene extends Phaser.Scene
 {
     constructor ()
@@ -20,6 +22,7 @@ export default class StarLayer2Scene extends Phaser.Scene
             cols: 24,
             rows: 30,
             cell: {
+                // I will need to change this or maybe this
                 width: 260,
                 height: 260
             }
@@ -38,10 +41,45 @@ export default class StarLayer2Scene extends Phaser.Scene
         });
 
         this.createStars();
+
+        //////////////////////////////////////////////
+
+        let world = this.csStars.world;
+
+        var player = this.scene.get("main").player;
+        this.cameraShadow = new CameraShadow(this, 0, 0);
+        this.cameraShadow.setTarget(player);
+
+        world.cam.setFocus(this.cameraShadow.x, this.cameraShadow.y, "cameraShadow");
+        world.cam.update();
+
+        this.cameras.main.startFollow(this.cameraShadow);
+        this.cameras.main.setBounds(0, 0, gridConfig.cols * gridConfig.cell.width, gridConfig.rows * gridConfig.cell.height);
+        this.lastMscZoom = this.scene.get("main").cameras.main.zoom;
     }
 
     update ()
     {
+        let world = this.csStars.world;
+
+        world.cam.updateFocus(this.cameraShadow.x, this.cameraShadow.y);
+        world.cam.update();
+
+        let mscZoom = this.scene.get("main").cameras.main.zoom;
+
+        if(mscZoom !== this.lastMSCZoom)
+        {
+            this.cameras.main.setZoom(mscZoom);
+
+            var _window = this.scene.get("main").csPlugin.world.cam.getWindow();
+
+            world.cam.setWindow(_window.x, _window.y, _window.width, _window.height);
+        }
+
+        this.lastMSCZoom = mscZoom;
+
+        //////////////////////////////////////////////
+
         this.renderStars();
     }
 
@@ -83,9 +121,9 @@ export default class StarLayer2Scene extends Phaser.Scene
             x = col * cellWidth;
             y = row * cellHeight;
 
-            for(i = 0; i < 17; i++)
+            for(i = 0; i < 7; i++)
             {
-                this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), 2, 2);
+                this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), 1, 1);
             }
         });
     }

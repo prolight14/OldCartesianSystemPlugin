@@ -42,6 +42,8 @@ export default class StarLayerScene extends Phaser.Scene
 
         this.createStars();
 
+        //////////////////////////////////////////////
+
         let world = this.csStars.world;
 
         var player = this.scene.get("main").player;
@@ -73,6 +75,8 @@ export default class StarLayerScene extends Phaser.Scene
         }
 
         this.lastMSCZoom = mscZoom;
+
+        //////////////////////////////////////////////
 
         this.renderStars();
     }
@@ -115,7 +119,7 @@ export default class StarLayerScene extends Phaser.Scene
             x = col * cellWidth;
             y = row * cellHeight;
 
-            for(i = 0; i < 34; i++)
+            for(i = 0; i < 3; i++)
             {
                 this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), 2, 2);
             }
