@@ -1,13 +1,13 @@
 export default class PhysicsSprite extends Phaser.GameObjects.Sprite
 {
-    constructor (scene, x, y)
+    constructor (scene, x, y, guide)
     {
         super(scene, x, y);
         scene.add.existing(this);
 
         this.setVisible(false);
 
-        this.guide = 0.7;
+        this.guide = guide;
 
         var bounds = scene.csStars.world.cam.getBounds();
 

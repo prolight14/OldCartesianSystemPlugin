@@ -19,12 +19,17 @@ export default class StarLayerScene extends Phaser.Scene
 
     create ()
     {
+        this.starsPerCell = 3;
+        this.starSize = 2;
+
+        var dimensions = this.scene.get("main").worldDimensions;
+
         var gridConfig = {
-            cols: 24,
-            rows: 30,
+            cols: Math.floor(dimensions.width / dimensions.cellWidth),
+            rows: Math.floor(dimensions.height / dimensions.cellHeight),
             cell: {
-                width: 260,
-                height: 260
+                width: dimensions.cellWidth,
+                height: dimensions.cellHeight
             }
         };
 
@@ -119,9 +124,9 @@ export default class StarLayerScene extends Phaser.Scene
             x = col * cellWidth;
             y = row * cellHeight;
 
-            for(i = 0; i < 3; i++)
+            for(i = 0; i < this.starsPerCell; i++)
             {
-                this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), 2, 2);
+                this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), this.starSize, this.starSize);
             }
         });
     }

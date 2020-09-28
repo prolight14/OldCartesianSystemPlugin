@@ -18,11 +18,19 @@ export default class MainScene extends Phaser.Scene
         });
     
         this.load.image("player", "./assets/player.png");
+        this.load.image("playerShip", "./assets/playerShip.png");
         this.load.image("wanderer", "./assets/wanderer.png");
     }
 
     create ()
     {
+        this.worldDimensions = {
+            width: 138000,
+            height: 138000,
+            cellWidth: 260,
+            cellHeight: 260
+        };
+
         this.csPlugin.setupWorld({
             camera: {
                 window: {
@@ -33,11 +41,11 @@ export default class MainScene extends Phaser.Scene
                 }
             },
             grid: {
-                cols: 24,
-                rows: 30,
+                cols: Math.floor(this.worldDimensions.width / this.worldDimensions.cellWidth),
+                rows: Math.floor(this.worldDimensions.height / this.worldDimensions.cellHeight),
                 cell: {
-                    height: 260,
-                    width: 260
+                    width: this.worldDimensions.cellWidth,
+                    height: this.worldDimensions.cellHeight
                 }
             },
         });
@@ -46,32 +54,41 @@ export default class MainScene extends Phaser.Scene
         this.setupCamera();
         this.setupScenes();
 
+
+        this.cameraKeys = {
+            '-': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.MINUS),
+            '_': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UNDERSCORE),
+            '=': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EQUALS),
+            '+': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.PLUS),
+            '0': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ZERO),
+        };
+    }
+
+    runCameraControls ()
+    {
         var cam = this.cameras.main;
 
-        this.input.keyboard.on('keyup', (event) =>
+        if(this.cameraKeys['-'].isDown || this.cameraKeys['_'].isDown)
         {
-            let step = 0.03;
+            this.setCameraZoom(Math.max(cam.zoom - 0.01, 0.25));
+        }
 
-            if(['-', '_'].indexOf(event.key) !== -1)
-            {
-                this.setCameraZoom(Math.max(cam.zoom - step, 0.25));
-            }
-            else if(['=', '+'].indexOf(event.key) !== -1)
-            {
-                this.setCameraZoom(Math.min(cam.zoom + step, 1.75));
-            }
-            else if(event.key === '0')
-            {
-                this.setCameraZoom(1.0);
-            }
-        });
+        if(this.cameraKeys['='].isDown || this.cameraKeys['+'].isDown)
+        {
+            this.setCameraZoom(Math.min(cam.zoom + 0.01, 1.75));     
+        }
+
+        if(this.cameraKeys['0'].isDown)
+        {
+            this.setCameraZoom(1);
+        }
     }
 
     setupWorldCameraFocus ()
     {
         var world = this.csPlugin.world;
 
-        this.player = world.add.gameObjectArray(Player).add(this, 200, 200, "player");
+        this.player = world.add.gameObjectArray(Player).add(this, this.worldDimensions.width * 0.5, this.worldDimensions.height * 0.5, "playerShip");
 
         world.cam.setFocus(this.player.x, this.player.y, "player");
         world.cam.update();
@@ -131,5 +148,7 @@ export default class MainScene extends Phaser.Scene
         this.csPlugin.world.cam.updateFocus(this.player.x, this.player.y);
 
         this.csPlugin.updateCS();
+
+        this.runCameraControls();
     }   
 }

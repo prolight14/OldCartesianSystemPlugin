@@ -18,13 +18,18 @@ export default class StarLayer2Scene extends Phaser.Scene
 
     create ()
     {
+        this.starsPerCell = 7;
+        this.starSize = 1;
+        this.starScroll = 0.7;
+
+        var dimensions = this.scene.get("main").worldDimensions;
+
         var gridConfig = {
-            cols: 24,
-            rows: 30,
+            cols: Math.floor(dimensions.width / dimensions.cellWidth),
+            rows: Math.floor(dimensions.height / dimensions.cellHeight),
             cell: {
-                // I will need to change this or maybe this
-                width: 260,
-                height: 260
+                width: dimensions.cellWidth,
+                height: dimensions.cellHeight
             }
         };
 
@@ -47,7 +52,7 @@ export default class StarLayer2Scene extends Phaser.Scene
         let world = this.csStars.world;
 
         var player = this.scene.get("main").player;
-        this.cameraShadow = new CameraShadow(this, 0, 0);
+        this.cameraShadow = new CameraShadow(this, 0, 0, this.starScroll);
         this.cameraShadow.setTarget(player);
 
         world.cam.setFocus(this.cameraShadow.x, this.cameraShadow.y, "cameraShadow");
@@ -121,9 +126,9 @@ export default class StarLayer2Scene extends Phaser.Scene
             x = col * cellWidth;
             y = row * cellHeight;
 
-            for(i = 0; i < 7; i++)
+            for(i = 0; i < this.starsPerCell; i++)
             {
-                this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), 1, 1);
+                this.starLayer.fillRect(x + rng.between(0, cellWidth), y + rng.between(0, cellHeight), this.starSize, this.starSize);
             }
         });
     }

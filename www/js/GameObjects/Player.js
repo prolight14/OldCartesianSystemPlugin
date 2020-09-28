@@ -13,55 +13,47 @@ export default class Player extends PhysicsSprite
             s: scene.input.keyboard.addKey('s')
         };
 
-        this.setScale(32, 32);
+        this.setScale(2, 2);
 
-        // var lastPreUpdate = this.preUpdate;
-        // this.preUpdate = function()
-        // {
-        //     lastPreUpdate.apply(this, arguments);
-        //     lastPreUpdate.apply(this, arguments);
-        // };
-
-        this.speed = 10;
+        this.dirSpeed = 0;
+        this.dirSpeedAcl = 0.5;
+        this.dirSpeedDeacl = 0.2;
+        this.dirSpeedAutoDeacl = 0.2;
+        this.maxDirSpeed = 20;
+        this.minDirSpeed = -3;
+        this.rotSpeed = 4;
     }
 
     preUpdate ()
     {
         if(this.keys.a.isDown)
         {
-            // this.setVelocityX(-500);
-
-            this.x -= this.speed;
+            this.setRotation(this.rotation - this.rotSpeed * Phaser.Math.DEG_TO_RAD);
         }
         if(this.keys.d.isDown)
         {
-            // this.setVelocityX(500);
-
-            this.x += this.speed;
-        }
-
-        if(!this.keys.a.isDown && !this.keys.d.isDown)
-        {
-            // this.setVelocityY(0);
+            this.setRotation(this.rotation + this.rotSpeed * Phaser.Math.DEG_TO_RAD);
         }
 
         if(this.keys.w.isDown)
         {
-            // this.setVelocityY(-500);
-
-            this.y -= this.speed;
+            this.dirSpeed += this.dirSpeedAcl;
+            this.dirSpeed = Math.min(this.dirSpeed, this.maxDirSpeed);
         }
-        if(this.keys.s.isDown)
+        else if(this.keys.s.isDown)
         {
-            // this.setVelocityY(500);
-
-            this.y += this.speed;
+            this.dirSpeed -= this.dirSpeedDeacl;
+            this.dirSpeed = Math.max(this.dirSpeed, this.minDirSpeed);
         }
-
-        if(!this.keys.w.isDown && !this.keys.s.isDown)
+        else
         {
-            // this.setVelocityY(0);
+            this.dirSpeed -= this.dirSpeedAutoDeacl;
+            this.dirSpeed = Math.max(this.dirSpeed, 0);
         }
+
+        var rot = this.rotation - Math.PI / 2; 
+        this.x += this.dirSpeed * Math.cos(rot);
+        this.y += this.dirSpeed * Math.sin(rot);
 
         this.body.postUpdate();
     }

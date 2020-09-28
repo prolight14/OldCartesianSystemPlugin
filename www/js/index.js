@@ -19,7 +19,7 @@ var config = {
     pixelArt: true,
     fps: {
         target: 30,
-        forceSetTimeOut: true
+        forceSetTimeOut: true,
     },
     scene: [MainScene, UIDebugScene, DebugScene, StarLayerScene, StarLayer2Scene]
 };
