@@ -81,6 +81,8 @@ export default class StarLayerScene extends Phaser.Scene
 
         this.lastMSCZoom = mscZoom;
 
+        this.cameras.main.setRotation(this.scene.get("main").cameras.main.rotation);
+
         //////////////////////////////////////////////
 
         this.renderStars();

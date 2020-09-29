@@ -54,33 +54,78 @@ export default class MainScene extends Phaser.Scene
         this.setupCamera();
         this.setupScenes();
 
-
         this.cameraKeys = {
             '-': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.MINUS),
             '_': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UNDERSCORE),
             '=': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EQUALS),
             '+': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.PLUS),
             '0': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ZERO),
+            'left': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
+            'right': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
+            'up': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
+            'down': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
         };
+
+        // Mainly used for when the player presses both the keys at once to "reset" the camera 
+        // so that when they let go they don't accidentally move the camera
+        this.canRotateCamera = true;
+        // Same goes for this one
+        this.canZoomUsingUpOrDown = true;
     }
 
     runCameraControls ()
     {
         var cam = this.cameras.main;
 
-        if(this.cameraKeys['-'].isDown || this.cameraKeys['_'].isDown)
+        if(this.canZoomUsingUpOrDown && this.cameraKeys['down'].isDown || this.cameraKeys['-'].isDown || this.cameraKeys['_'].isDown)
         {
             this.setCameraZoom(Math.max(cam.zoom - 0.01, 0.25));
         }
 
-        if(this.cameraKeys['='].isDown || this.cameraKeys['+'].isDown)
+        if(this.canZoomUsingUpOrDown && this.cameraKeys['up'].isDown || this.cameraKeys['='].isDown || this.cameraKeys['+'].isDown)
         {
             this.setCameraZoom(Math.min(cam.zoom + 0.01, 1.75));     
+        }
+
+        if(this.cameraKeys['down'].isDown && this.cameraKeys['up'].isDown)
+        {
+            this.setCameraZoom(1);   
+
+            this.canZoomUsingUpOrDown = false;
+
+            this.time.delayedCall(500, () =>
+            {
+                this.canZoomUsingUpOrDown = true;
+            });
         }
 
         if(this.cameraKeys['0'].isDown)
         {
             this.setCameraZoom(1);
+        }
+
+        if(this.canRotateCamera)
+        {
+            if(this.cameraKeys['left'].isDown)
+            {
+                this.cameras.main.setRotation(this.cameras.main.rotation - Math.PI * 0.01);
+            }
+            if(this.cameraKeys['right'].isDown)
+            {
+                this.cameras.main.setRotation(this.cameras.main.rotation + Math.PI * 0.01);
+            }
+        }
+
+        if(this.cameraKeys['left'].isDown && this.cameraKeys['right'].isDown)
+        {
+            this.cameras.main.setRotation(0);
+
+            this.canRotateCamera = false;
+
+            this.time.delayedCall(500, () =>
+            {
+                this.canRotateCamera = true;
+            }); 
         }
     }
 
@@ -136,7 +181,9 @@ export default class MainScene extends Phaser.Scene
     setupScenes ()
     {
         this.scene.run("UIDebug");
-        // this.scene.run("debug");
+
+        // Scene that follow the camera:
+        this.scene.run("debug");
         this.scene.run("starLayer");
         this.scene.sendToBack("starLayer");
         this.scene.run("starLayer2");

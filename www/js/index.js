@@ -9,6 +9,7 @@ import StarLayer2Scene from "./scenes/StarLayer2Scene.js";
  * Just a prototype
  *
  * Also, I just realized I can't use arcade physics for space related stuff. I have to use MatterJs.
+ * Also use vectors for space ships and space ship AI. Well maybe other things as well. I'd also want gravity. etc. etc.
  *
  */
 
