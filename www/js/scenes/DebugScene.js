@@ -12,7 +12,7 @@ export default class DebugScene extends Phaser.Scene
         this.cellGraphics = this.add.graphics();
 
         // Will eventually be moved to `UIDebugScene.js`
-        this.addWindow();
+        // this.addWindow();
     }
 
     // Will eventually be moved to `UIDebugScene.js`
@@ -30,12 +30,12 @@ export default class DebugScene extends Phaser.Scene
         this.updateMainCamera();
         this.showCells();
 
-        this.debugGraphics.clear();
-        this.debugGraphics.lineStyle(4, 0x00ff00, 1);
+        // this.debugGraphics.clear();
+        // this.debugGraphics.lineStyle(4, 0x00ff00, 1);
 
-        var mainScene = this.scene.get("main");
-        var camWindow = mainScene.csPlugin.world.cam.getWindow();
-        this.debugGraphics.strokeRect(camWindow.x, camWindow.y, camWindow.width, camWindow.height);
+        // var mainScene = this.scene.get("main");
+        // var camWindow = mainScene.csPlugin.world.cam.getWindow();
+        // this.debugGraphics.strokeRect(camWindow.x, camWindow.y, camWindow.width, camWindow.height);
     }
 
     updateMainCamera ()

@@ -1,6 +1,7 @@
 "use strict";
 
 import Player from "../GameObjects/Player.js";
+import Wanderer from "../GameObjects/Wanderer.js";
 
 export default class MainScene extends Phaser.Scene 
 {
@@ -66,6 +67,15 @@ export default class MainScene extends Phaser.Scene
             'down': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
         };
 
+        this.csPlugin.world.add.gameObjectArray(Wanderer).add(
+            this, 
+            this.worldDimensions.width * 0.5 + Phaser.Math.Between(-100, 100), 
+            this.worldDimensions.height * 0.5 + Phaser.Math.Between(-100, 100), 
+            "wanderer"
+        ).worldBounds = this.csPlugin.world.cam.getBounds();
+
+       
+
         // Mainly used for when the player presses both the keys at once to "reset" the camera 
         // so that when they let go they don't accidentally move the camera
         this.canRotateCamera = true;
@@ -118,7 +128,7 @@ export default class MainScene extends Phaser.Scene
 
         if(this.cameraKeys['left'].isDown && this.cameraKeys['right'].isDown)
         {
-            this.cameras.main.setCameraRotation(0);
+            this.setCameraRotation(0);
 
             this.canRotateCamera = false;
 
@@ -163,7 +173,7 @@ export default class MainScene extends Phaser.Scene
     {
         this.cameras.main.setZoom(zoom);
 
-        this.recalculateWorldCamWindow(zoom);
+        this.recalculateWorldCamWindow();
     }
 
     setCameraRotation (rotation)
@@ -173,7 +183,7 @@ export default class MainScene extends Phaser.Scene
         this.recalculateWorldCamWindow();
     }
 
-    recalculateWorldCamWindow (zoom)
+    recalculateWorldCamWindow ()
     {
         var world = this.csPlugin.world;
         var cam = this.cameras.main;
@@ -191,7 +201,6 @@ export default class MainScene extends Phaser.Scene
         let reuseHyp = Math.sqrt(Math.pow(defaultWindow.halfWidth, 2) + Math.pow(defaultWindow.halfHeight, 2));
         let startingAngle = Math.tan(defaultWindow.halfHeight, defaultWindow.halfWidth) + cam.rotation;
 
-        // Todo: Make `Math.tab(...)` a constant then add angles to it for calculating... well I get the point
         upperLeft.angle = startingAngle + Math.PI * 1.5;
         upperLeft.x = Math.cos(upperLeft.angle) * reuseHyp;
         upperLeft.y = Math.sin(upperLeft.angle) * reuseHyp;
@@ -218,8 +227,8 @@ export default class MainScene extends Phaser.Scene
         var width = maxX - minX;
         var height = maxY - minY;
 
-        var derivedCamWindowWidth = width / (zoom || 1);
-        var derivedCamWindowHeight = height / (zoom || 1);
+        var derivedCamWindowWidth = width / cam.zoom;
+        var derivedCamWindowHeight = height / cam.zoom;
 
         this.csPlugin.world.cam.setWindow(
             x - (derivedCamWindowWidth - width) / 2, 
@@ -233,8 +242,8 @@ export default class MainScene extends Phaser.Scene
     {
         this.scene.run("UIDebug");
 
-        // Scene that follow the camera:
-        this.scene.run("debug");
+        // Scenes that follow the camera:
+        // this.scene.run("debug");
         this.scene.run("starLayer");
         this.scene.sendToBack("starLayer");
         this.scene.run("starLayer2");
