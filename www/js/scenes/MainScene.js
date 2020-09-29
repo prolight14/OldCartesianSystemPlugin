@@ -28,8 +28,8 @@ export default class MainScene extends Phaser.Scene
         this.worldDimensions = {
             width: 138000,
             height: 138000,
-            cellWidth: 260,
-            cellHeight: 260
+            cellWidth: 400,
+            cellHeight: 400
         };
 
         this.csPlugin.setupWorld({
@@ -198,7 +198,7 @@ export default class MainScene extends Phaser.Scene
         defaultWindow.halfWidth = defaultWindow.width / 2;
         defaultWindow.halfHeight = defaultWindow.height / 2;
 
-        let reuseHyp = Math.sqrt(Math.pow(defaultWindow.halfWidth, 2) + Math.pow(defaultWindow.halfHeight, 2));
+        let reuseHyp = Math.sqrt(Math.pow(defaultWindow.halfWidth, 2) + Math.pow(defaultWindow.halfHeight, 2)) * 1.24;
         let startingAngle = Math.tan(defaultWindow.halfHeight, defaultWindow.halfWidth) + cam.rotation;
 
         upperLeft.angle = startingAngle + Math.PI * 1.5;

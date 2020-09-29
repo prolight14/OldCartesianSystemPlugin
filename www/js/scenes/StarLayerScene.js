@@ -19,7 +19,7 @@ export default class StarLayerScene extends Phaser.Scene
 
     create ()
     {
-        this.starsPerCell = 3;
+        this.starsPerCell = 5;
         this.starSize = 2;
 
         var dimensions = this.scene.get("main").worldDimensions;
