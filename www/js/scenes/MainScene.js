@@ -108,17 +108,17 @@ export default class MainScene extends Phaser.Scene
         {
             if(this.cameraKeys['left'].isDown)
             {
-                this.cameras.main.setRotation(this.cameras.main.rotation - Math.PI * 0.01);
+                this.setCameraRotation(this.cameras.main.rotation - Math.PI * 0.01);
             }
             if(this.cameraKeys['right'].isDown)
             {
-                this.cameras.main.setRotation(this.cameras.main.rotation + Math.PI * 0.01);
+                this.setCameraRotation(this.cameras.main.rotation + Math.PI * 0.01);
             }
         }
 
         if(this.cameraKeys['left'].isDown && this.cameraKeys['right'].isDown)
         {
-            this.cameras.main.setRotation(0);
+            this.cameras.main.setCameraRotation(0);
 
             this.canRotateCamera = false;
 
@@ -161,18 +161,69 @@ export default class MainScene extends Phaser.Scene
 
     setCameraZoom (zoom)
     {
+        this.cameras.main.setZoom(zoom);
+
+        this.recalculateWorldCamWindow(zoom);
+    }
+
+    setCameraRotation (rotation)
+    {
+        this.cameras.main.setRotation(rotation);
+
+        this.recalculateWorldCamWindow();
+    }
+
+    recalculateWorldCamWindow (zoom)
+    {
         var world = this.csPlugin.world;
         var cam = this.cameras.main;
-        
-        cam.setZoom(zoom);
 
         var defaultWindow = world.cam.defaultWindow;
-        
-        var derivedCamWindowWidth = defaultWindow.width / zoom;
-        var derivedCamWindowHeight = defaultWindow.height / zoom;
+
+        let upperLeft = {};
+        let lowerLeft = {};
+        let upperRight = {};
+        let lowerRight = {};
+
+        defaultWindow.halfWidth = defaultWindow.width / 2;
+        defaultWindow.halfHeight = defaultWindow.height / 2;
+
+        let reuseHyp = Math.sqrt(Math.pow(defaultWindow.halfWidth, 2) + Math.pow(defaultWindow.halfHeight, 2));
+        let startingAngle = Math.tan(defaultWindow.halfHeight, defaultWindow.halfWidth) + cam.rotation;
+
+        // Todo: Make `Math.tab(...)` a constant then add angles to it for calculating... well I get the point
+        upperLeft.angle = startingAngle + Math.PI * 1.5;
+        upperLeft.x = Math.cos(upperLeft.angle) * reuseHyp;
+        upperLeft.y = Math.sin(upperLeft.angle) * reuseHyp;
+
+        lowerLeft.angle = startingAngle + Math.PI;
+        lowerLeft.x = Math.cos(lowerLeft.angle) * reuseHyp;
+        lowerLeft.y = Math.sin(lowerLeft.angle) * reuseHyp;
+
+        upperRight.angle = startingAngle;
+        upperRight.x = Math.cos(upperRight.angle) * reuseHyp;
+        upperRight.y = Math.sin(upperRight.angle) * reuseHyp;
+
+        lowerRight.angle = startingAngle + Math.PI / 2;
+        lowerRight.x = Math.cos(lowerRight.angle) * reuseHyp;
+        lowerRight.y = Math.sin(lowerRight.angle) * reuseHyp;
+
+        var minX = Math.min(upperLeft.x, lowerLeft.x, upperRight.x, lowerRight.x);
+        var maxX = Math.max(upperLeft.x, lowerLeft.x, upperRight.x, lowerRight.x);
+        var minY = Math.min(upperLeft.y, lowerLeft.y, upperRight.y, lowerRight.y);
+        var maxY = Math.max(upperLeft.y, lowerLeft.y, upperRight.y, lowerRight.y);
+
+        var x = minX;
+        var y = minY;
+        var width = maxX - minX;
+        var height = maxY - minY;
+
+        var derivedCamWindowWidth = width / (zoom || 1);
+        var derivedCamWindowHeight = height / (zoom || 1);
+
         this.csPlugin.world.cam.setWindow(
-            defaultWindow.x - (derivedCamWindowWidth - defaultWindow.width) / 2, 
-            defaultWindow.y - (derivedCamWindowHeight - defaultWindow.height) / 2, 
+            x - (derivedCamWindowWidth - width) / 2, 
+            y - (derivedCamWindowHeight - height) / 2, 
             derivedCamWindowWidth,
             derivedCamWindowHeight
         );
