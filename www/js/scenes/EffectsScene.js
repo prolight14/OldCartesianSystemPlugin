@@ -4,7 +4,7 @@ export default class EffectsScene extends Phaser.Scene
     {
         super("effects");
     }
-    
+
     create ()
     {
         this.updateCamera();

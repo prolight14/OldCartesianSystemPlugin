@@ -245,6 +245,7 @@ export default class MainScene extends Phaser.Scene
         // Scenes that follow the camera:
         // this.scene.run("debug");
         this.scene.run("effects");
+        this.scene.sendToBack("effects");
         this.scene.run("starLayer");
         this.scene.sendToBack("starLayer");
         this.scene.run("starLayer2");

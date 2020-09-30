@@ -1,5 +1,7 @@
 import PhysicsSprite from "./PhysicsSprite.js"
 
+const HALF_PI = Math.PI / 2;
+
 export default class PlayerShip extends PhysicsSprite
 {
     constructor (scene, x, y, texture, frame)
@@ -23,12 +25,12 @@ export default class PlayerShip extends PhysicsSprite
         this.minDirSpeed = -3;
         this.rotSpeed = 4;
 
-        this.scene.scene.get("effects").add.particles("playerShipParticles").createEmitter({
+        this.thrusterEmitter = this.scene.scene.get("effects").add.particles("playerShipParticles").createEmitter({
             frame: ["particle1", "particle2", "particle3", "particle4"],
             x: this.x,
             y: this.y,
             speed: 200,
-            lifespan: 3000,
+            lifespan: 700,
         });
     }
 
@@ -59,10 +61,32 @@ export default class PlayerShip extends PhysicsSprite
             this.dirSpeed = Math.max(this.dirSpeed, 0);
         }
 
-        var rot = this.rotation - Math.PI / 2; 
+        var rot = this.rotation - HALF_PI; 
         this.x += this.dirSpeed * Math.cos(rot);
         this.y += this.dirSpeed * Math.sin(rot);
 
+        this.updateThrusterParticles();
+
         this.body.postUpdate();
+    }
+
+    updateThrusterParticles ()
+    {
+        var rotation = HALF_PI + this.rotation;
+        var hyp = (this.displayHeight * 0.2 / this.scene.cameras.main.zoom);
+        var range = this.displayWidth * 0.34;
+        var thrusterEjectPlace = Phaser.Math.Between(-range, range);
+
+        var _opp = thrusterEjectPlace;
+        var _adj = this.displayHeight * 0.2;
+        
+        var theta = Math.atan2(_adj, _opp);
+        var _hyp = Math.sqrt(_opp * _opp + _adj * _adj);
+
+        this.thrusterEmitter.setPosition(
+            this.x + Math.cos(rotation) * hyp + Math.cos(this.rotation + theta) * _hyp, 
+            this.y + Math.sin(rotation) * hyp + Math.sin(this.rotation + theta) * _hyp
+        );
+        this.thrusterEmitter.setEmitterAngle(Phaser.Math.Between(40, 140) + this.angle);
     }
 }
