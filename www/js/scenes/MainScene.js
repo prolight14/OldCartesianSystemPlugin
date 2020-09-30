@@ -1,6 +1,6 @@
 "use strict";
 
-import Player from "../GameObjects/Player.js";
+import PlayerShip from "../GameObjects/PlayerShip.js";
 import Wanderer from "../GameObjects/Wanderer.js";
 
 export default class MainScene extends Phaser.Scene 
@@ -18,9 +18,10 @@ export default class MainScene extends Phaser.Scene
             sceneKey: 'csPlugin'
         });
     
-        this.load.image("player", "./assets/player.png");
-        this.load.image("playerShip", "./assets/playerShip.png");
+        this.load.image("playerShip", "./assets/playerShip/ship.png");
         this.load.image("wanderer", "./assets/wanderer.png");
+
+        this.load.atlas("playerShipParticles", "./assets/playerShip/particles.png", "./assets/playerShip/particles.json");
     }
 
     create ()
@@ -73,7 +74,6 @@ export default class MainScene extends Phaser.Scene
             this.worldDimensions.height * 0.5 + Phaser.Math.Between(-100, 100), 
             "wanderer"
         ).worldBounds = this.csPlugin.world.cam.getBounds();
-
        
 
         // Mainly used for when the player presses both the keys at once to "reset" the camera 
@@ -143,7 +143,7 @@ export default class MainScene extends Phaser.Scene
     {
         var world = this.csPlugin.world;
 
-        this.player = world.add.gameObjectArray(Player).add(this, this.worldDimensions.width * 0.5, this.worldDimensions.height * 0.5, "playerShip");
+        this.player = world.add.gameObjectArray(PlayerShip).add(this, this.worldDimensions.width * 0.5, this.worldDimensions.height * 0.5, "playerShip");
 
         world.cam.setFocus(this.player.x, this.player.y, "player");
         world.cam.update();
@@ -241,9 +241,10 @@ export default class MainScene extends Phaser.Scene
     setupScenes ()
     {
         this.scene.run("UIDebug");
-
+      
         // Scenes that follow the camera:
         // this.scene.run("debug");
+        this.scene.run("effects");
         this.scene.run("starLayer");
         this.scene.sendToBack("starLayer");
         this.scene.run("starLayer2");

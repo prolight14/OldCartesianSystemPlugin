@@ -1,4 +1,5 @@
 import MainScene from "./scenes/MainScene.js";
+import EffectsScene from "./scenes/EffectsScene.js";
 import DebugScene from "./scenes/DebugScene.js";
 import UIDebugScene from "./scenes/UIDebugScene.js";
 import StarLayerScene from "./scenes/StarLayerScene.js";
@@ -22,7 +23,7 @@ var config = {
         target: 30,
         forceSetTimeOut: true,
     },
-    scene: [MainScene, UIDebugScene, DebugScene, StarLayerScene, StarLayer2Scene]
+    scene: [MainScene, UIDebugScene, DebugScene, StarLayerScene, StarLayer2Scene, EffectsScene]
 };
 
 var game = new Phaser.Game(config);

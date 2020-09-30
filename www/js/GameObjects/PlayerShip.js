@@ -1,6 +1,6 @@
 import PhysicsSprite from "./PhysicsSprite.js"
 
-export default class Player extends PhysicsSprite
+export default class PlayerShip extends PhysicsSprite
 {
     constructor (scene, x, y, texture, frame)
     {
@@ -22,6 +22,14 @@ export default class Player extends PhysicsSprite
         this.maxDirSpeed = 20;
         this.minDirSpeed = -3;
         this.rotSpeed = 4;
+
+        this.scene.scene.get("effects").add.particles("playerShipParticles").createEmitter({
+            frame: ["particle1", "particle2", "particle3", "particle4"],
+            x: this.x,
+            y: this.y,
+            speed: 200,
+            lifespan: 3000,
+        });
     }
 
     preUpdate ()

@@ -52,7 +52,7 @@ CartesianSystemPlugin.prototype = {
 
         sys.updateList.getActive().forEach((gameObject) =>
         {
-            if(gameObject.body === undefined)
+            if(gameObject.body === undefined || gameObject.body === null)
             {
                 return;
             }
