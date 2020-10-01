@@ -83,10 +83,18 @@ export default class PlayerShip extends PhysicsSprite
         var theta = Math.atan2(_adj, _opp);
         var _hyp = Math.sqrt(_opp * _opp + _adj * _adj);
 
+        let cameraRotation = this.scene.scene.get("effects").cameras.main.rotation;
+
         this.thrusterEmitter.setPosition(
-            this.x + Math.cos(rotation) * hyp + Math.cos(this.rotation + theta) * _hyp, 
-            this.y + Math.sin(rotation) * hyp + Math.sin(this.rotation + theta) * _hyp
+            this.x,// + Math.cos(rotation - cameraRotation) * hyp + Math.cos(this.rotation + theta - cameraRotation) * _hyp, 
+            this.y// + Math.sin(rotation - cameraRotation) * hyp + Math.sin(this.rotation + theta - cameraRotation) * _hyp
         );
-        this.thrusterEmitter.setEmitterAngle(Phaser.Math.Between(40, 140) + this.angle);
+
+
+        // this.thrusterEmitter.startFollow(this);
+        this.thrusterEmitter.setEmitterAngle(Phaser.Math.Between(40, 140));
+        // this.thrusterEmitter.angle = this.angle + cameraRotation * Phaser.Math.RAD_TO_DEG;
+        this.thrusterEmitter.setSpeed(30);
+        this.thrusterEmitter.setRadial(true);
     }
 }
