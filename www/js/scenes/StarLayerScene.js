@@ -51,7 +51,7 @@ export default class StarLayerScene extends Phaser.Scene
 
         let world = this.csStars.world;
 
-        var player = this.scene.get("main").player;
+        var player = this.scene.get("main").playerShip;
         world.cam.setFocus(player.x, player.y, "player");
         world.cam.update();
 
@@ -64,7 +64,7 @@ export default class StarLayerScene extends Phaser.Scene
     {
         let world = this.csStars.world;
 
-        var player = this.scene.get("main").player;
+        var player = this.scene.get("main").playerShip;
         world.cam.updateFocus(player.x, player.y);
         world.cam.update();
 

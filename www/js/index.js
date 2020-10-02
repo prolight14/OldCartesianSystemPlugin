@@ -14,11 +14,11 @@ import StarLayer2Scene from "./scenes/StarLayer2Scene.js";
  *
  */
 
-var config = {
+var spaceConfig = {
     type: Phaser.CANVAS,
     width: 800,
     height: 480,
-    pixelArt: true,
+    pixelArt: true, // Vital for any pixelated games
     fps: {
         target: 30,
         forceSetTimeOut: true,
@@ -26,8 +26,16 @@ var config = {
     scene: [MainScene, UIDebugScene, DebugScene, StarLayerScene, StarLayer2Scene, EffectsScene]
 };
 
-var game = new Phaser.Game(config);
+var spaceGame = new Phaser.Game(config);
 
 // Debug/Dev only
-window.game = game;
-window.config = config;
+window.spaceGame = spaceGame;
+window.spaceConfig = spaceConfig;
+
+///////////////////////////////////////////////////////////
+
+// var config = {
+
+// };
+
+// var game = new Phaser.Game()

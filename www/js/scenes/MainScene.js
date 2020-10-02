@@ -2,6 +2,7 @@
 
 import PlayerShip from "../GameObjects/PlayerShip.js";
 import Wanderer from "../GameObjects/Wanderer.js";
+import Planet from "../GameObjects/Planet.js";
 
 export default class MainScene extends Phaser.Scene 
 {
@@ -19,9 +20,12 @@ export default class MainScene extends Phaser.Scene
         });
     
         this.load.image("playerShip", "./assets/playerShip/ship.png");
+        this.load.atlas("playerShipParticles", "./assets/playerShip/particles.png", "./assets/playerShip/particles.json");
+
         this.load.image("wanderer", "./assets/wanderer.png");
 
-        this.load.atlas("playerShipParticles", "./assets/playerShip/particles.png", "./assets/playerShip/particles.json");
+        this.load.image("icyDwarfPlanet", "./assets/planets/icyDwarfPlanet.png");
+
     }
 
     create ()
@@ -52,6 +56,24 @@ export default class MainScene extends Phaser.Scene
             },
         });
 
+        var world = this.csPlugin.world;
+
+        var planets = world.add.gameObjectArray(Planet);
+
+        planets.add(this, 77777, 60000, "icyDwarfPlanet").setScale(10, 10);
+
+        var wanderers = world.add.gameObjectArray(Wanderer);
+
+        for(var i = 0; i < 20000; i++)
+        {
+            wanderers.add(
+                this, 
+                this.worldDimensions.width * Math.random(), 
+                this.worldDimensions.height * Math.random(), 
+                "wanderer"
+            ).worldBounds = this.csPlugin.world.cam.getBounds();
+        }
+
         this.setupWorldCameraFocus();
         this.setupCamera();
         this.setupScenes();
@@ -68,19 +90,13 @@ export default class MainScene extends Phaser.Scene
             'down': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
         };
 
-        this.csPlugin.world.add.gameObjectArray(Wanderer).add(
-            this, 
-            this.worldDimensions.width * 0.5 + Phaser.Math.Between(-100, 100), 
-            this.worldDimensions.height * 0.5 + Phaser.Math.Between(-100, 100), 
-            "wanderer"
-        ).worldBounds = this.csPlugin.world.cam.getBounds();
-       
-
         // Mainly used for when the player presses both the keys at once to "reset" the camera 
         // so that when they let go they don't accidentally move the camera
         this.canRotateCamera = true;
         // Same goes for this one
         this.canZoomUsingUpOrDown = true;
+
+        this.saveKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     runCameraControls ()
@@ -143,16 +159,16 @@ export default class MainScene extends Phaser.Scene
     {
         var world = this.csPlugin.world;
 
-        this.player = world.add.gameObjectArray(PlayerShip).add(this, this.worldDimensions.width * 0.5, this.worldDimensions.height * 0.5, "playerShip");
+        this.playerShip = world.add.gameObjectArray(PlayerShip).add(this, this.worldDimensions.width * 0.5, this.worldDimensions.height * 0.5, "playerShip");
 
-        world.cam.setFocus(this.player.x, this.player.y, "player");
+        world.cam.setFocus(this.playerShip.x, this.playerShip.y, "player");
         world.cam.update();
     }
 
     setupCamera ()
     {
         var cam = this.cameras.main;
-        cam.startFollow(this.player);
+        cam.startFollow(this.playerShip);
 
         var world = this.csPlugin.world;
 
@@ -254,10 +270,32 @@ export default class MainScene extends Phaser.Scene
 
     update ()
     {
-        this.csPlugin.world.cam.updateFocus(this.player.x, this.player.y);
+        this.csPlugin.world.cam.updateFocus(this.playerShip.x, this.playerShip.y);
 
         this.csPlugin.updateCS();
 
         this.runCameraControls();
+
+        this.children.getChildren().forEach(element =>
+        {
+            if(element._name === "planet" && element.canInteract(this.playerShip))
+            {
+                this.playerShip.onTouchPlanet(element);
+            }
+        });
+
+        /* temp */
+        if(this.saveKey.isDown)
+        {
+            this.save();
+        }
+        /* (end) temp */
     }   
+
+    /* temp */
+    save ()
+    {
+        localStorage.setItem("player", JSON.stringify(this.playerShip.toJSON()));
+    }
+    /* (end) temp */
 }
