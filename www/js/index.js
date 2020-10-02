@@ -14,7 +14,7 @@ import StarLayer2Scene from "./scenes/StarLayer2Scene.js";
  *
  */
 
-var spaceConfig = {
+var config = {
     type: Phaser.CANVAS,
     width: 800,
     height: 480,
@@ -23,19 +23,15 @@ var spaceConfig = {
         target: 30,
         forceSetTimeOut: true,
     },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
     scene: [MainScene, UIDebugScene, DebugScene, StarLayerScene, StarLayer2Scene, EffectsScene]
 };
 
-var spaceGame = new Phaser.Game(config);
+var game = new Phaser.Game(config);
 
 // Debug/Dev only
-window.spaceGame = spaceGame;
-window.spaceConfig = spaceConfig;
-
-///////////////////////////////////////////////////////////
-
-// var config = {
-
-// };
-
-// var game = new Phaser.Game()
+window.game = game;
+window.config = config;

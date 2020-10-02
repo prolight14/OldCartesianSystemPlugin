@@ -32,17 +32,6 @@ export default class PlayerShip extends PhysicsSprite
             speed: 200,
             lifespan: 700,
         });
-           
-        /* temp */
-        var savedPlayerProperties = JSON.parse(localStorage.getItem("player"));
-
-        this.setX(savedPlayerProperties.x); 
-        this.setY(savedPlayerProperties.y); 
-        this.setRotation(savedPlayerProperties.rotation);
-        this.setData(savedPlayerProperties.data);
-        /* (end) temp */
-
-        this.body.updateBoundingBox();
     }
 
     preUpdate ()

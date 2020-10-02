@@ -56,6 +56,15 @@ export default class MainScene extends Phaser.Scene
             },
         });
 
+        this.addObjetsToWorld();
+        this.setupWorldCameraFocus();
+        this.setupCamera();
+        this.setupScenes();
+        this.setupCameraControls();
+    }
+
+    addObjetsToWorld ()
+    {
         var world = this.csPlugin.world;
 
         var planets = world.add.gameObjectArray(Planet);
@@ -73,11 +82,40 @@ export default class MainScene extends Phaser.Scene
                 "wanderer"
             ).worldBounds = this.csPlugin.world.cam.getBounds();
         }
+    }
 
-        this.setupWorldCameraFocus();
-        this.setupCamera();
-        this.setupScenes();
+    setupWorldCameraFocus ()
+    {
+        var world = this.csPlugin.world;
 
+        this.playerShip = world.add.gameObjectArray(PlayerShip).add(this, 77900, 60500, "playerShip");
+
+        world.cam.setFocus(this.playerShip.x, this.playerShip.y, "player");
+        world.cam.update();
+    }
+
+    setupCamera ()
+    {
+        var cam = this.cameras.main;
+        cam.startFollow(this.playerShip);
+
+        var world = this.csPlugin.world;
+
+        var worldCamBounds = world.cam.getBounds();
+
+        cam.setBounds(
+            worldCamBounds.minX, 
+            worldCamBounds.minY, 
+            worldCamBounds.maxX - worldCamBounds.minX, 
+            worldCamBounds.maxY - worldCamBounds.minY
+        );
+        world.cam.defaultWindow = world.cam.getWindow();
+
+        this.setCameraZoom(1);
+    }
+
+    setupCameraControls ()
+    {
         this.cameraKeys = {
             '-': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.MINUS),
             '_': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UNDERSCORE),
@@ -95,8 +133,6 @@ export default class MainScene extends Phaser.Scene
         this.canRotateCamera = true;
         // Same goes for this one
         this.canZoomUsingUpOrDown = true;
-
-        this.saveKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }
 
     runCameraControls ()
@@ -153,36 +189,6 @@ export default class MainScene extends Phaser.Scene
                 this.canRotateCamera = true;
             }); 
         }
-    }
-
-    setupWorldCameraFocus ()
-    {
-        var world = this.csPlugin.world;
-
-        this.playerShip = world.add.gameObjectArray(PlayerShip).add(this, this.worldDimensions.width * 0.5, this.worldDimensions.height * 0.5, "playerShip");
-
-        world.cam.setFocus(this.playerShip.x, this.playerShip.y, "player");
-        world.cam.update();
-    }
-
-    setupCamera ()
-    {
-        var cam = this.cameras.main;
-        cam.startFollow(this.playerShip);
-
-        var world = this.csPlugin.world;
-
-        var worldCamBounds = world.cam.getBounds();
-
-        cam.setBounds(
-            worldCamBounds.minX, 
-            worldCamBounds.minY, 
-            worldCamBounds.maxX - worldCamBounds.minX, 
-            worldCamBounds.maxY - worldCamBounds.minY
-        );
-        world.cam.defaultWindow = world.cam.getWindow();
-
-        this.setCameraZoom(1);
     }
 
     setCameraZoom (zoom)
@@ -282,20 +288,6 @@ export default class MainScene extends Phaser.Scene
             {
                 this.playerShip.onTouchPlanet(element);
             }
-        });
-
-        /* temp */
-        if(this.saveKey.isDown)
-        {
-            this.save();
-        }
-        /* (end) temp */
+        })
     }   
-
-    /* temp */
-    save ()
-    {
-        localStorage.setItem("player", JSON.stringify(this.playerShip.toJSON()));
-    }
-    /* (end) temp */
 }

@@ -1,4 +1,4 @@
-canvas {
+/* canvas {
     padding: 0;
     margin: auto;
     display: block;
@@ -9,7 +9,9 @@ canvas {
     right: 0;
 
     border-color: rgba(0, 0, 0, 0);
-} 
+}  */
+
+
 body {
     margin: 0;
     padding: 0; 
