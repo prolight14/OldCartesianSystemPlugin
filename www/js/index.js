@@ -3,6 +3,7 @@ import EffectsScene from "./scenes/EffectsScene.js";
 import DebugScene from "./scenes/DebugScene.js";
 import UIDebugScene from "./scenes/UIDebugScene.js";
 import StarLayerScene from "./scenes/StarLayerScene.js";
+import PlanetScene from "./scenes/PlanetScene.js";
 import StarLayer2Scene from "./scenes/StarLayer2Scene.js";
 
 /**
@@ -27,7 +28,7 @@ var config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [MainScene, UIDebugScene, DebugScene, StarLayerScene, StarLayer2Scene, EffectsScene]
+    scene: [MainScene, UIDebugScene, DebugScene, PlanetScene, StarLayerScene, StarLayer2Scene, EffectsScene]
 };
 
 var game = new Phaser.Game(config);

@@ -3,7 +3,6 @@
 import CameraShadow from "../GameObjects/CameraShadow.js";
 import PlayerShip from "../GameObjects/PlayerShip.js";
 import Wanderer from "../GameObjects/Wanderer.js";
-import Planet from "../GameObjects/Planet.js";
 
 export default class MainScene extends Phaser.Scene 
 {
@@ -66,10 +65,6 @@ export default class MainScene extends Phaser.Scene
     addObjectsToWorld ()
     {
         let world = this.csPlugin.world;
-
-        var planets = world.add.gameObjectArray(Planet);
-
-        planets.add(this, 77777, 60000, "icyDwarfPlanet").setScale(10, 10);
 
         var wanderers = world.add.gameObjectArray(Wanderer);
 
@@ -223,7 +218,7 @@ export default class MainScene extends Phaser.Scene
         defaultWindow.halfWidth = defaultWindow.width / 2;
         defaultWindow.halfHeight = defaultWindow.height / 2;
 
-        let reuseHyp = Math.sqrt(Math.pow(defaultWindow.halfWidth, 2) + Math.pow(defaultWindow.halfHeight, 2)) * 1.24;
+        let reuseHyp = Math.sqrt(Math.pow(defaultWindow.halfWidth, 2) + Math.pow(defaultWindow.halfHeight, 2));
         let startingAngle = Math.tan(defaultWindow.halfHeight, defaultWindow.halfWidth) + cam.rotation;
 
         upperLeft.angle = startingAngle + Math.PI * 1.5;
@@ -271,6 +266,8 @@ export default class MainScene extends Phaser.Scene
         // this.scene.run("debug");
         this.scene.run("effects");
         this.scene.sendToBack("effects");
+        this.scene.run("planet");
+        this.scene.sendToBack("planet");
         this.scene.run("starLayer");
         this.scene.sendToBack("starLayer");
         this.scene.run("starLayer2");

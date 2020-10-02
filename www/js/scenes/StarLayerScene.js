@@ -1,20 +1,18 @@
 // Todo?: Make this a class I can instantiate for multiple star layers
 // If I can just purely works with out running into any problems then I can get A LOT done.
 
-export default class StarLayerScene extends Phaser.Scene 
+import BaseBackgroundScene from "./BaseBackgroundScene.js";
+
+export default class StarLayerScene extends BaseBackgroundScene
 {
     constructor ()
     {
-        super("starLayer");
+        super("starLayer", "csStars");
     }
 
     preload ()
     {
-        this.load.scenePlugin({
-            key: "CartesianSystemPlugin",
-            url: "./js/libraries/CartesianSystemPlugin.js",
-            sceneKey: 'csStars'
-        });
+        this.preloadWorld();
     }
 
     create ()
@@ -22,71 +20,13 @@ export default class StarLayerScene extends Phaser.Scene
         this.starsPerCell = 5;
         this.starSize = 2;
 
-        var dimensions = this.scene.get("main").worldDimensions;
-
-        var gridConfig = {
-            cols: Math.floor(dimensions.width / dimensions.cellWidth),
-            rows: Math.floor(dimensions.height / dimensions.cellHeight),
-            cell: {
-                width: dimensions.cellWidth,
-                height: dimensions.cellHeight
-            }
-        };
-
-        this.csStars.setupWorld({
-            camera: {
-                window: {
-                    x: 0,
-                    y: 0,
-                    width: this.game.config.width,
-                    height: this.game.config.height
-                }
-            },
-            grid: gridConfig
-        });
-
+        this.createWorld();
         this.createStars();
-
-        //////////////////////////////////////////////
-
-        let world = this.csStars.world;
-        let mainScene = this.scene.get("main");
-
-        var cameraFocus = mainScene.cameraFocus;
-        world.cam.setFocus(cameraFocus.x, cameraFocus.y, "cameraFocus");
-        world.cam.update();
-
-        this.cameras.main.startFollow(cameraFocus);
-        this.cameras.main.setBounds(0, 0, gridConfig.cols * gridConfig.cell.width, gridConfig.rows * gridConfig.cell.height);
-        this.lastMscZoom = mainScene.cameras.main.zoom;
     }
 
     update ()
     {
-        let world = this.csStars.world;
-        let mainScene = this.scene.get("main");
-
-        var cameraFocus = mainScene.cameraFocus;
-        world.cam.updateFocus(cameraFocus.x, cameraFocus.y);
-        world.cam.update();
-
-        let mscZoom = mainScene.cameras.main.zoom;
-
-        if(mscZoom !== this.lastMSCZoom)
-        {
-            this.cameras.main.setZoom(mscZoom);
-
-            var _window = mainScene.csPlugin.world.cam.getWindow();
-
-            world.cam.setWindow(_window.x, _window.y, _window.width, _window.height);
-        }
-
-        this.lastMSCZoom = mscZoom;
-
-        this.cameras.main.setRotation(mainScene.cameras.main.rotation);
-
-        //////////////////////////////////////////////
-
+        this.updateWorld();
         this.renderStars();
     }
 
