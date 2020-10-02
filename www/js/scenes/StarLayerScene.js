@@ -26,7 +26,7 @@ export default class StarLayerScene extends BaseBackgroundScene
 
     update ()
     {
-        this.updateWorld();
+        this.updateWorldCamera();
         this.renderStars();
     }
 

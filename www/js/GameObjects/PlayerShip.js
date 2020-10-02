@@ -30,7 +30,7 @@ export default class PlayerShip extends PhysicsSprite
             x: this.x,
             y: this.y,
             speed: 200,
-            lifespan: 700,
+            lifespan: 700
         });
     }
 

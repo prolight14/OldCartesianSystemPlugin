@@ -5,8 +5,6 @@ export default class Planet extends PhysicsSprite
     constructor (scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
-
-        this.body.moves = false;
     }
 
     canInteract (sprite)

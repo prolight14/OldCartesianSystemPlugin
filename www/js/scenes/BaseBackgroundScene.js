@@ -55,7 +55,7 @@ export default class BaseBackgroundScene extends Phaser.Scene
         this.lastMscZoom = mainScene.cameras.main.zoom;
     }
 
-    updateWorld ()
+    updateWorldCamera ()
     {
         let world = this[this.csKeyName].world;
         let mainScene = this.scene.get("main");
@@ -78,5 +78,10 @@ export default class BaseBackgroundScene extends Phaser.Scene
         this.lastMSCZoom = mscZoom;
 
         this.cameras.main.setRotation(mainScene.cameras.main.rotation);
+    }
+
+    updateWorld ()
+    {
+        this[this.csKeyName].updateCS();
     }
 }

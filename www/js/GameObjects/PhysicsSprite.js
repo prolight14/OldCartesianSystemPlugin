@@ -6,10 +6,9 @@ export default class PhysicsSprite extends Phaser.GameObjects.Sprite
 
         scene.add.existing(this);
         // scene.physics.add.existing(this);
-
         // this.setCollideWorldBounds(true);
 
-        var _this = this;
+        let _this = this;
 
         this.body = {};
 
@@ -26,5 +25,13 @@ export default class PhysicsSprite extends Phaser.GameObjects.Sprite
         this.body.updateBoundingBox();
 
         this.body.postUpdate = function() {};
+
+        var lastSetScale = this.setScale;
+        this.setScale = function()
+        {
+            let toReturn = lastSetScale.apply(this, arguments);
+            this.body.updateBoundingBox();
+            return toReturn;
+        };
     }
 }

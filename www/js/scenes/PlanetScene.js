@@ -26,6 +26,21 @@ export default class PlanetScene extends BaseBackgroundScene
 
     update ()
     {
+        this.updateWorldCamera();
         this.updateWorld();
+        this.runPhysics();
+    }
+
+    runPhysics ()
+    {
+        let playerShip = this.scene.get("main").playerShip;
+
+        this.children.getChildren().forEach(element =>
+        {
+            if(element._name === "planet" && element.canInteract(playerShip))
+            {
+                playerShip.onTouchPlanet(element);
+            }
+        });
     }
 }

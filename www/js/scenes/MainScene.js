@@ -261,7 +261,7 @@ export default class MainScene extends Phaser.Scene
     setupScenes ()
     {
         this.scene.run("UIDebug");
-      
+        
         // Scenes that follow the camera:
         // this.scene.run("debug");
         this.scene.run("effects");
@@ -274,17 +274,6 @@ export default class MainScene extends Phaser.Scene
         this.scene.sendToBack("starLayer2");
     }
 
-    runPhysics ()
-    {
-        this.children.getChildren().forEach(element =>
-        {
-            if(element._name === "planet" && element.canInteract(this.playerShip))
-            {
-                this.playerShip.onTouchPlanet(element);
-            }
-        });
-    }
-
     update ()
     {
         // Camera
@@ -294,6 +283,5 @@ export default class MainScene extends Phaser.Scene
 
         // World
         this.csPlugin.updateCS();
-        this.runPhysics();
     }   
 }
