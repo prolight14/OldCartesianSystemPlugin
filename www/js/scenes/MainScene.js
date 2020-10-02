@@ -1,5 +1,6 @@
 "use strict";
 
+import CameraShadow from "../GameObjects/CameraShadow.js";
 import PlayerShip from "../GameObjects/PlayerShip.js";
 import Wanderer from "../GameObjects/Wanderer.js";
 import Planet from "../GameObjects/Planet.js";
@@ -25,7 +26,6 @@ export default class MainScene extends Phaser.Scene
         this.load.image("wanderer", "./assets/wanderer.png");
 
         this.load.image("icyDwarfPlanet", "./assets/planets/icyDwarfPlanet.png");
-
     }
 
     create ()
@@ -56,16 +56,16 @@ export default class MainScene extends Phaser.Scene
             },
         });
 
-        this.addObjetsToWorld();
+        this.addObjectsToWorld();
         this.setupWorldCameraFocus();
         this.setupCamera();
         this.setupScenes();
         this.setupCameraControls();
     }
 
-    addObjetsToWorld ()
+    addObjectsToWorld ()
     {
-        var world = this.csPlugin.world;
+        let world = this.csPlugin.world;
 
         var planets = world.add.gameObjectArray(Planet);
 
@@ -82,15 +82,18 @@ export default class MainScene extends Phaser.Scene
                 "wanderer"
             ).worldBounds = this.csPlugin.world.cam.getBounds();
         }
+
+        this.playerShip = world.add.gameObjectArray(PlayerShip).add(this, 77900, 60500, "playerShip");
     }
 
     setupWorldCameraFocus ()
     {
-        var world = this.csPlugin.world;
+        let world = this.csPlugin.world;
 
-        this.playerShip = world.add.gameObjectArray(PlayerShip).add(this, 77900, 60500, "playerShip");
+        this.cameraFocus = new CameraShadow(this, this.csPlugin, 0, 0, 1);
+        this.cameraFocus.setTarget(this.playerShip);
 
-        world.cam.setFocus(this.playerShip.x, this.playerShip.y, "player");
+        world.cam.setFocus(this.cameraFocus.x, this.cameraFocus.y, "cameraFocus");
         world.cam.update();
     }
 
@@ -274,20 +277,26 @@ export default class MainScene extends Phaser.Scene
         this.scene.sendToBack("starLayer2");
     }
 
-    update ()
+    runPhysics ()
     {
-        this.csPlugin.world.cam.updateFocus(this.playerShip.x, this.playerShip.y);
-
-        this.csPlugin.updateCS();
-
-        this.runCameraControls();
-
         this.children.getChildren().forEach(element =>
         {
             if(element._name === "planet" && element.canInteract(this.playerShip))
             {
                 this.playerShip.onTouchPlanet(element);
             }
-        })
+        });
+    }
+
+    update ()
+    {
+        // Camera
+        this.cameraFocus.update();
+        this.csPlugin.world.cam.updateFocus(this.cameraFocus.x, this.cameraFocus.y);
+        this.runCameraControls();
+
+        // World
+        this.csPlugin.updateCS();
+        this.runPhysics();
     }   
 }

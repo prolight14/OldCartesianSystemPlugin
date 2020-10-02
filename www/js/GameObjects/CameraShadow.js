@@ -1,15 +1,13 @@
-export default class PhysicsSprite extends Phaser.GameObjects.Sprite
+export default class CameraShadow
 {
-    constructor (scene, x, y, guide)
+    constructor (scene, cs, x, y, guide)
     {
-        super(scene, x, y);
-        scene.add.existing(this);
-
-        this.setVisible(false);
-
+        this.scene = scene;
+        this.x = x;
+        this.y = y;
         this.guide = guide;
 
-        var bounds = scene.csStars.world.cam.getBounds();
+        var bounds = cs.world.cam.getBounds();
 
         var width = bounds.maxX - bounds.minX;
         var height = bounds.maxY - bounds.minY;
@@ -18,7 +16,7 @@ export default class PhysicsSprite extends Phaser.GameObjects.Sprite
         this.toSubY = (height - height / this.guide) * 0.5;
     }
 
-    preUpdate ()
+    update ()
     {
         this.x = this.target.x * this.guide - this.toSubX;
         this.y = this.target.y * this.guide - this.toSubY;

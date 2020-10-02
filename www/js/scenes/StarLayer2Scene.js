@@ -51,9 +51,8 @@ export default class StarLayer2Scene extends Phaser.Scene
 
         let world = this.csStars.world;
 
-        var player = this.scene.get("main").playerShip;
-        this.cameraShadow = new CameraShadow(this, 0, 0, this.starScroll);
-        this.cameraShadow.setTarget(player);
+        this.cameraShadow = new CameraShadow(this, this.csStars, 0, 0, this.starScroll);
+        this.cameraShadow.setTarget(this.scene.get("main").cameraFocus);
 
         world.cam.setFocus(this.cameraShadow.x, this.cameraShadow.y, "cameraShadow");
         world.cam.update();
@@ -66,6 +65,8 @@ export default class StarLayer2Scene extends Phaser.Scene
     update ()
     {
         let world = this.csStars.world;
+
+        this.cameraShadow.update();
 
         world.cam.updateFocus(this.cameraShadow.x, this.cameraShadow.y);
         world.cam.update();

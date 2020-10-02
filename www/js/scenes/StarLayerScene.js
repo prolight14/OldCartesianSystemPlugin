@@ -50,38 +50,40 @@ export default class StarLayerScene extends Phaser.Scene
         //////////////////////////////////////////////
 
         let world = this.csStars.world;
+        let mainScene = this.scene.get("main");
 
-        var player = this.scene.get("main").playerShip;
-        world.cam.setFocus(player.x, player.y, "player");
+        var cameraFocus = mainScene.cameraFocus;
+        world.cam.setFocus(cameraFocus.x, cameraFocus.y, "cameraFocus");
         world.cam.update();
 
-        this.cameras.main.startFollow(player);
+        this.cameras.main.startFollow(cameraFocus);
         this.cameras.main.setBounds(0, 0, gridConfig.cols * gridConfig.cell.width, gridConfig.rows * gridConfig.cell.height);
-        this.lastMscZoom = this.scene.get("main").cameras.main.zoom;
+        this.lastMscZoom = mainScene.cameras.main.zoom;
     }
 
     update ()
     {
         let world = this.csStars.world;
+        let mainScene = this.scene.get("main");
 
-        var player = this.scene.get("main").playerShip;
-        world.cam.updateFocus(player.x, player.y);
+        var cameraFocus = mainScene.cameraFocus;
+        world.cam.updateFocus(cameraFocus.x, cameraFocus.y);
         world.cam.update();
 
-        let mscZoom = this.scene.get("main").cameras.main.zoom;
+        let mscZoom = mainScene.cameras.main.zoom;
 
         if(mscZoom !== this.lastMSCZoom)
         {
             this.cameras.main.setZoom(mscZoom);
 
-            var _window = this.scene.get("main").csPlugin.world.cam.getWindow();
+            var _window = mainScene.csPlugin.world.cam.getWindow();
 
             world.cam.setWindow(_window.x, _window.y, _window.width, _window.height);
         }
 
         this.lastMSCZoom = mscZoom;
 
-        this.cameras.main.setRotation(this.scene.get("main").cameras.main.rotation);
+        this.cameras.main.setRotation(mainScene.cameras.main.rotation);
 
         //////////////////////////////////////////////
 
