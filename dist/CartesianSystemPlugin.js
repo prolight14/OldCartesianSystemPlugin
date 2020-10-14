@@ -172,6 +172,11 @@ CartesianSystemPlugin.prototype = {
     
                 return toReturn;
             };
+
+            gameObject.body.destroy = function()
+            {
+                world.grid.removeReference(gameObject);
+            };
         });
 
         // Remove all thing to be processed so that we don't run into errors 

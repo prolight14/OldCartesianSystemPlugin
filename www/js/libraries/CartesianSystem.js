@@ -899,6 +899,18 @@ function World(config)
 
         return this;
     };
+    this.grid.removeReference = function(object)
+    {
+        cameraGrid.removeRef(object);
+
+        return this;
+    };
+    this.grid.addReference = function(object)
+    {
+        cameraGrid.addRef(object);
+
+        return this;
+    };
     this.grid.refreshReferences = function(object)
     {
         cameraGrid.removeRef(object);

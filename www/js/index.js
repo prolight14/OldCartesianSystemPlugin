@@ -1,10 +1,15 @@
-import MainScene from "./scenes/MainScene.js";
-import EffectsScene from "./scenes/EffectsScene.js";
-import DebugScene from "./scenes/DebugScene.js";
-import UIDebugScene from "./scenes/UIDebugScene.js";
-import StarLayerScene from "./scenes/StarLayerScene.js";
-import PlanetScene from "./scenes/PlanetScene.js";
-import StarLayer2Scene from "./scenes/StarLayer2Scene.js";
+ 
+// Space scenes
+
+import MainScene from "./scenes/space/MainScene.js";
+import EffectsScene from "./scenes/space/EffectsScene.js";
+import DebugScene from "./scenes/space/DebugScene.js";
+import UIDebugScene from "./scenes/space/UIDebugScene.js";
+import StarLayerScene from "./scenes/space/StarLayerScene.js";
+import PlanetScene from "./scenes/space/PlanetScene.js";
+import StarLayer2Scene from "./scenes/space/StarLayer2Scene.js";
+
+// Planet / platformer scenes
 
 /**
  * This is just a test of the Cartesian System with Phaser 3 it's not an actual plugin yet...
@@ -18,17 +23,20 @@ import StarLayer2Scene from "./scenes/StarLayer2Scene.js";
 var config = {
     type: Phaser.CANVAS,
     width: 800,
-    height: 480,
+    height: 480, // 450 for 16:9 android smartphone ratio
     pixelArt: true, // Vital for any pixelated games
     fps: {
         target: 30,
+        min: 25,
         forceSetTimeOut: true,
     },
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [MainScene, UIDebugScene, DebugScene, PlanetScene, StarLayerScene, StarLayer2Scene, EffectsScene]
+    scene: [
+        MainScene, UIDebugScene, DebugScene, PlanetScene, StarLayerScene, StarLayer2Scene, EffectsScene
+    ]
 };
 
 var game = new Phaser.Game(config);
