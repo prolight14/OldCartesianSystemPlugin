@@ -1,3 +1,5 @@
+import CameraShadow from "../../GameObjects/space/CameraShadow.js";
+
 export default class BaseBackgroundScene extends Phaser.Scene
 {
     constructor (sceneName, csKeyName)
@@ -46,11 +48,25 @@ export default class BaseBackgroundScene extends Phaser.Scene
         let world = this[this.csKeyName].world;
         let mainScene = this.scene.get("main");
 
-        var cameraFocus = mainScene.cameraFocus;
-        world.cam.setFocus(cameraFocus.x, cameraFocus.y, "cameraFocus");
-        world.cam.update();
+        if(this.starScroll)
+        {
+            this.cameraShadow = new CameraShadow(this, this[this.csKeyName], 0, 0, this.starScroll);
+            this.cameraShadow.setTarget(mainScene.cameraFocus);
 
-        this.cameras.main.startFollow(cameraFocus);
+            world.cam.setFocus(this.cameraShadow.x, this.cameraShadow.y, "cameraShadow");
+            world.cam.update();
+
+            this.cameras.main.startFollow(this.cameraShadow);
+        }
+        else
+        {
+            var cameraFocus = mainScene.cameraFocus;
+            world.cam.setFocus(cameraFocus.x, cameraFocus.y, "cameraFocus");
+            world.cam.update();
+    
+            this.cameras.main.startFollow(cameraFocus);
+        }
+
         this.cameras.main.setBounds(0, 0, gridConfig.cols * gridConfig.cell.width, gridConfig.rows * gridConfig.cell.height);
         this.lastMscZoom = mainScene.cameras.main.zoom;
     }
@@ -60,9 +76,19 @@ export default class BaseBackgroundScene extends Phaser.Scene
         let world = this[this.csKeyName].world;
         let mainScene = this.scene.get("main");
 
-        var cameraFocus = mainScene.cameraFocus;
-        world.cam.updateFocus(cameraFocus.x, cameraFocus.y);
-        world.cam.update();
+        if(this.starScroll && this.cameraShadow)
+        {
+            this.cameraShadow.update();
+
+            world.cam.updateFocus(this.cameraShadow.x, this.cameraShadow.y);
+            world.cam.update();
+        }
+        else
+        {
+            var cameraFocus = mainScene.cameraFocus;
+            world.cam.updateFocus(cameraFocus.x, cameraFocus.y);
+            world.cam.update();
+        }
 
         let mscZoom = mainScene.cameras.main.zoom;
 

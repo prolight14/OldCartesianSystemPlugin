@@ -1,10 +1,10 @@
 import BaseBackgroundScene from "./BaseBackgroundScene.js";
 
-export default class StarLayerScene extends BaseBackgroundScene
+export default class StarLayer4Scene extends BaseBackgroundScene
 {
     constructor ()
     {
-        super("starLayer", "csStars");
+        super("starLayer4", "csStars4");
     }
 
     preload ()
@@ -14,8 +14,9 @@ export default class StarLayerScene extends BaseBackgroundScene
 
     create ()
     {
-        this.starsPerCell = 10;
-        this.starSize = 2;
+        this.starsPerCell = 25;
+        this.starSize = 1;
+        this.starScroll = 0.25;
 
         this.createWorld();
         this.createStars();
@@ -31,7 +32,7 @@ export default class StarLayerScene extends BaseBackgroundScene
     {   
         this.starLayer = this.add.graphics();
 
-        let world = this.csStars.world;
+        let world = this.csStars4.world;
 
         let rng = new Phaser.Math.RandomDataGenerator(["starLayer1"]);
 
@@ -52,7 +53,7 @@ export default class StarLayerScene extends BaseBackgroundScene
         this.starLayer.clear();
         this.starLayer.fillStyle(0xFFFFFF);
 
-        let world = this.csStars.world;
+        let world = this.csStars4.world;
 
         let rng, i, x, y;
 

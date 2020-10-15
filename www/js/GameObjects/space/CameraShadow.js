@@ -12,8 +12,10 @@ export default class CameraShadow
         var width = bounds.maxX - bounds.minX;
         var height = bounds.maxY - bounds.minY;
 
-        this.toSubX = (width - width / this.guide) * 0.5;
-        this.toSubY = (height - height / this.guide) * 0.5;
+        // this.toSubX = (width - width / this.guide) * 0.5;
+        // this.toSubY = (height - height / this.guide) * 0.5;
+        this.toSubX = (width - width / this.guide) * this.guide;
+        this.toSubY = (height - height / this.guide) * this.guide;
     }
 
     update ()

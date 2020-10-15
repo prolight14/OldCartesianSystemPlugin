@@ -38,32 +38,32 @@ export default class PlayerShip extends PhysicsSprite
     {
         if(this.keys.a.isDown)
         {
-            this.setRotation(this.rotation - this.rotSpeed * Phaser.Math.DEG_TO_RAD);
+            this.setRotation(this.rotation - this.rotSpeed * Phaser.Math.DEG_TO_RAD * this.scene.fSpeed);
         }
         if(this.keys.d.isDown)
         {
-            this.setRotation(this.rotation + this.rotSpeed * Phaser.Math.DEG_TO_RAD);
+            this.setRotation(this.rotation + this.rotSpeed * Phaser.Math.DEG_TO_RAD * this.scene.fSpeed);
         }
 
         if(this.keys.w.isDown)
         {
-            this.dirSpeed += this.dirSpeedAcl;
+            this.dirSpeed += this.dirSpeedAcl * this.scene.fSpeed;
             this.dirSpeed = Math.min(this.dirSpeed, this.maxDirSpeed);
         }
         else if(this.keys.s.isDown)
         {
-            this.dirSpeed -= this.dirSpeedDeacl;
+            this.dirSpeed -= this.dirSpeedDeacl * this.scene.fSpeed;
             this.dirSpeed = Math.max(this.dirSpeed, this.minDirSpeed);
         }
         else
         {
-            this.dirSpeed -= this.dirSpeedAutoDeacl;
+            this.dirSpeed -= this.dirSpeedAutoDeacl * this.scene.fSpeed;
             this.dirSpeed = Math.max(this.dirSpeed, 0);
         }
 
         var rot = this.rotation - HALF_PI; 
-        this.x += this.dirSpeed * Math.cos(rot);
-        this.y += this.dirSpeed * Math.sin(rot);
+        this.x += this.dirSpeed * Math.cos(rot) * this.scene.fSpeed;
+        this.y += this.dirSpeed * Math.sin(rot) * this.scene.fSpeed;
 
         let marginX = this.scene.game.config.width / 2;
         this.x = Math.min(Math.max(this.x, marginX), this.scene.worldDimensions.width - marginX);

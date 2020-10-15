@@ -2,6 +2,7 @@
 
 import CameraShadow from "../../GameObjects/space/CameraShadow.js";
 import PlayerShip from "../../GameObjects/space/PlayerShip.js";
+import EnemyShip from "../../GameObjects/space/EnemyShip.js";
 
 export default class MainScene extends Phaser.Scene 
 {
@@ -18,10 +19,10 @@ export default class MainScene extends Phaser.Scene
             sceneKey: 'csPlugin'
         });
 
-        this.load.image("playerShip", "./assets/space/playerShip/ship.png");
-        this.load.atlas("playerShipParticles", "./assets/space/playerShip/particles.png", "./assets/space/playerShip/particles.json");
+        this.load.image("playerShip", "./assets/space/ships/player/ship.png");
+        this.load.atlas("playerShipParticles", "./assets/space/ships/player/particles.png", "./assets/space/ships/player/particles.json");
 
-        this.load.image("wanderer", "./assets/space/wanderer.png");
+        this.load.image("enemyShip", "./assets/space/ships/enemy/ship.png");
 
         this.load.image("icyDwarfPlanet", "./assets/space/planets/icyDwarfPlanet.png");
     }
@@ -59,6 +60,9 @@ export default class MainScene extends Phaser.Scene
         this.setupCamera();
         this.setupScenes();
         this.setupCameraControls();
+
+        this.fSpeed = 1;
+        this.defaultFps = 30;
     }
 
     setupScenes ()
@@ -75,6 +79,10 @@ export default class MainScene extends Phaser.Scene
         this.scene.sendToBack("starLayer");
         this.scene.run("starLayer2");
         this.scene.sendToBack("starLayer2");
+        this.scene.run("starLayer3");
+        this.scene.sendToBack("starLayer3");
+        this.scene.run("starLayer4");
+        this.scene.sendToBack("starLayer4");
     }
 
     addObjectsToWorld ()
@@ -82,6 +90,16 @@ export default class MainScene extends Phaser.Scene
         let world = this.csPlugin.world;
 
         this.playerShip = world.add.gameObjectArray(PlayerShip).add(this, 77900, 60500, "playerShip");
+
+        let enemyShips = world.add.gameObjectArray(EnemyShip);
+
+        var i, angle, length;
+        for(i = 0; i < 10000; i++)
+        {
+            angle = Math.random() * Math.PI * 2;
+            length = Phaser.Math.Between(0, 150000);
+            enemyShips.add(this, 77900 + Math.cos(angle) * length, 60500 + Math.sin(angle) * length, "enemyShip");
+        }
     }
 
     setupWorldCameraFocus ()
@@ -261,7 +279,7 @@ export default class MainScene extends Phaser.Scene
         );
     }
 
-    update ()
+    update (time, delta)
     {
         // Camera
         this.cameraFocus.update();
@@ -270,5 +288,7 @@ export default class MainScene extends Phaser.Scene
 
         // World
         this.csPlugin.updateCS();
+
+        this.fSpeed = (delta / 1000) * this.defaultFps;
     }   
 }
