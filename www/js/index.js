@@ -21,15 +21,10 @@ import StarLayer4Scene from "./scenes/space/StarLayer4Scene.js";
  */
 
 var config = {
-    type: Phaser.CANVAS,
+    type: Phaser.AUTO,
     width: 800,
     height: 480, // 450 for 16:9 android smartphone ratio
     pixelArt: true, // Vital for any pixelated games
-    // fps: {
-    //     target: 30,
-    //     min: 25,
-    //     forceSetTimeOut: true,
-    // },
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
