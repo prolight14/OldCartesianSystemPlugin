@@ -3,6 +3,7 @@
 import CameraShadow from "../../GameObjects/space/CameraShadow.js";
 import PlayerShip from "../../GameObjects/space/PlayerShip.js";
 import EnemyShip from "../../GameObjects/space/EnemyShip.js";
+import Nebula from "../../GameObjects/space/Nebula.js";
 
 export default class MainScene extends Phaser.Scene 
 {
@@ -25,6 +26,54 @@ export default class MainScene extends Phaser.Scene
         this.load.image("enemyShip", "./assets/space/ships/enemy/ship.png");
 
         this.load.image("icyDwarfPlanet", "./assets/space/planets/icyDwarfPlanet.png");
+        this.load.image("redDustPlanet", "./assets/space/planets/RedDustPlanet.png");
+        this.load.spritesheet("roughNebula", "./assets/space/nebula/roughNebula.png", {
+            frameWidth: 64,
+            frameHeight: 16
+        });
+    }
+
+    addObjectsToWorld ()
+    {
+        let world = this.csPlugin.world;
+
+        this.playerShip = world.add.gameObjectArray(PlayerShip).add(this, 77900, 60500, "playerShip");
+
+        let enemyShips = world.add.gameObjectArray(EnemyShip);
+
+        var i, angle, length;
+        for(i = 0; i < 300; i++)
+        {
+            angle = Math.random() * Math.PI * 2;
+            length = Phaser.Math.Between(0, 150000);
+            enemyShips.add(this, 77900 + Math.cos(angle) * length, 60500 + Math.sin(angle) * length, "enemyShip");
+        }
+
+        var nebulae = world.add.gameObjectArray(Nebula);
+
+        this.createNebulaeCluster(nebulae, 77900, 53500, 70);
+        this.createNebulaeCluster(nebulae, 74900, 51500, 70);
+
+        for(var j = 0; j < Phaser.Math.Between(2, 8); j++)
+        {
+            nebulae.add(this, 77900, 60500, "roughNebula", Phaser.Math.Between(0, 12));
+        }
+    }
+
+    createNebulaeCluster (nebulae, x, y, amt)
+    {
+        var i, j, posX, posY;
+
+        for(i = 0; i < amt; i++)
+        {
+            posX = x + Phaser.Math.Between(-2000, 2000);
+            posY = y + Phaser.Math.Between(-2000, 2000);
+
+            for(j = 0; j < Phaser.Math.Between(2, 8); j++)
+            {
+                nebulae.add(this, posX, posY, "roughNebula", Phaser.Math.Between(0, 12));
+            }
+        }
     }
 
     create ()
@@ -83,23 +132,6 @@ export default class MainScene extends Phaser.Scene
         this.scene.sendToBack("starLayer3");
         this.scene.run("starLayer4");
         this.scene.sendToBack("starLayer4");
-    }
-
-    addObjectsToWorld ()
-    {
-        let world = this.csPlugin.world;
-
-        this.playerShip = world.add.gameObjectArray(PlayerShip).add(this, 77900, 60500, "playerShip");
-
-        let enemyShips = world.add.gameObjectArray(EnemyShip);
-
-        var i, angle, length;
-        for(i = 0; i < 10000; i++)
-        {
-            angle = Math.random() * Math.PI * 2;
-            length = Phaser.Math.Between(0, 150000);
-            enemyShips.add(this, 77900 + Math.cos(angle) * length, 60500 + Math.sin(angle) * length, "enemyShip");
-        }
     }
 
     setupWorldCameraFocus ()

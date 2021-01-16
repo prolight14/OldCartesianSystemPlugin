@@ -568,6 +568,12 @@ function GameObjectHandler()
                 }
             }
         }
+
+        // Sort the used id array
+        for(id in used)
+        {
+            used[id].sort();
+        }
     };
 
     this.act = function(cameraGrid, key)

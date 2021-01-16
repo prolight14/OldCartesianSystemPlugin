@@ -9,6 +9,7 @@ export default class UIDebugScene extends Phaser.Scene
     create ()
     {
         this.fpsText = this.add.text(24, 24, "Fps: 60").setScrollFactor(0);
+        this.posText = this.add.text(600, 24, "(???, ???)").setScrollFactor(0);
         this.cellText = this.add.text(24, 300, "").setScrollFactor(0);
     }
 
@@ -16,6 +17,13 @@ export default class UIDebugScene extends Phaser.Scene
     {
         this.showFps(delta);
         this.showCellInfo();
+        this.setPosText();
+    }
+
+    setPosText ()
+    {
+        var mainScene = this.scene.get("main");
+        this.posText.setText("(" + mainScene.playerShip.x.toFixed(0) + "," + mainScene.playerShip.y.toFixed(0) + ")"); 
     }
 
     showFps (delta)

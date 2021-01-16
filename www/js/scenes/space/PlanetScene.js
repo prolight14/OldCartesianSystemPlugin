@@ -22,6 +22,7 @@ export default class PlanetScene extends BaseBackgroundScene
         var planets = world.add.gameObjectArray(Planet);
 
         planets.add(this, 77777, 60000, "icyDwarfPlanet").setScale(10, 10);
+        planets.add(this, 74637, 64000, "redDustPlanet").setScale(10, 10);
     }
 
     update ()

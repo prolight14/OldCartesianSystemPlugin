@@ -59,6 +59,14 @@ export default class DebugScene extends Phaser.Scene
         world.grid.loopThroughVisibleCells((cell, col, row) =>
         {
             this.cellGraphics.strokeRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+
+            // for(var i in cell)
+            // {
+            //     var gameObject = world.get.gameObject(cell[i].arrayName, cell[i].id);
+            //     var box = gameObject.body.boundingBox;
+
+            //     this.cellGraphics.strokeRect(box.minX, box.minY, box.maxX - box.minX, box.maxY - box.minY);
+            // }
         });
     }
 }

@@ -25,10 +25,10 @@ var config = {
     width: 800,
     height: 480, // 450 for 16:9 android smartphone ratio
     pixelArt: true, // Vital for any pixelated games
-    fps: {
-        target: 300,
-        forceSetTimeOut: true
-    },
+    // fps: {
+    //     target: 300,
+    //     forceSetTimeOut: true
+    // },
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -39,8 +39,6 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
-
-game.
 
 // Debug/Dev only
 window.game = game;

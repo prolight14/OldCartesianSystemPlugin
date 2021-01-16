@@ -106,3 +106,71 @@ export default class PlayScene extends Phaser.Scene
         this.pipelineInstance.setFloat2("uLight1", activePointer.x, this.height - activePointer.y);
     }
 }
+
+/*
+
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = fragCoord / iResolution.xy;
+
+    vec2 disPos1 = vec2(0.5, 0.5);
+
+    float dx1 = (disPos1.x - uv.x) * (iResolution.x / iResolution.y);
+    float dy1 = disPos1.y - uv.y;
+
+    vec2 displace = vec2(0.0);
+
+    float sqDist = dx1 * dx1 + dy1 * dy1;
+
+    //if(sqDist < 0.25)
+    {
+        float theta = atan(dy1, dx1) + sqrt(sqDist) * (15.0 + sin(iTime) * 30.0);
+    
+        displace.x = cos(theta);    
+        displace.y = sin(theta);
+    }
+
+   // displace.x *= 0.5;
+
+    // input uv (x, y) into texture to get rgb
+    vec3 col = texture(iChannel0, uv + displace).rgb;
+    
+    // Output to screen
+    fragColor = vec4(col, 1.0);
+}
+*/
+
+/* v2
+ void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = fragCoord / iResolution.xy;
+
+    vec2 disPos1 = vec2(0.5, 0.5);
+
+    float dx1 = (disPos1.x - uv.x) * (iResolution.x / iResolution.y);
+    float dy1 = disPos1.y - uv.y;
+
+    vec2 displace = vec2(0.0);
+
+    float sqDist = dx1 * dx1 + dy1 * dy1;
+
+    //if(sqDist < 0.25)
+    {
+        float theta = atan(dy1, dx1) + sqrt(sqDist) * (6.0 + tan(iTime) * 3.0);
+    
+        displace.x = cos(theta);    
+        displace.y = sin(theta);
+    }
+
+   // displace.x *= 0.5;
+
+    // input uv (x, y) into texture to get rgb
+    vec3 col = texture(iChannel0, uv + displace).rgb;
+    
+    // Output to screen
+    fragColor = vec4(col, 1.0);
+}
+ */
