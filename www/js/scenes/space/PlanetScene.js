@@ -29,5 +29,17 @@ export default class PlanetScene extends BaseBackgroundScene
     {
         this.updateWorldCamera();
         this.updateWorld();
+
+        let playerShip = this.scene.get("main").playerShip;
+
+        let world = this.csPlanets.world;
+
+        let planet = world.get.gameObject("planet", 0);
+        let planetRadius = Math.pow((planet.displayWidth + planet.displayHeight) / 4, 2);
+
+        if(Math.pow(playerShip.x - planet.x, 2) + Math.pow(playerShip.y - planet.y, 2) < planetRadius)
+        {
+            this.scene.get("main").switchToPlanet(planet);
+        }
     }
 }

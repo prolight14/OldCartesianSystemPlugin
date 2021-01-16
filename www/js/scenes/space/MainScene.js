@@ -53,11 +53,6 @@ export default class MainScene extends Phaser.Scene
 
         this.createNebulaeCluster(nebulae, 77900, 53500, 70);
         this.createNebulaeCluster(nebulae, 74900, 51500, 70);
-
-        for(var j = 0; j < Phaser.Math.Between(2, 8); j++)
-        {
-            nebulae.add(this, 77900, 60500, "roughNebula", Phaser.Math.Between(0, 12));
-        }
     }
 
     createNebulaeCluster (nebulae, x, y, amt)
@@ -132,6 +127,18 @@ export default class MainScene extends Phaser.Scene
         this.scene.sendToBack("starLayer3");
         this.scene.run("starLayer4");
         this.scene.sendToBack("starLayer4");
+    }
+
+    switchToPlanet ()
+    {
+        this.scene.stop("UIDebug");
+        this.scene.stop("debug");
+        this.scene.stop("effects");
+        this.scene.stop("planet");
+        this.scene.stop("starLayer");
+        this.scene.stop("starLayer2");
+        this.scene.stop("starLayer3");
+        this.scene.stop("starLayer4");
     }
 
     setupWorldCameraFocus ()
