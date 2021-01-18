@@ -11,6 +11,10 @@ import StarLayer2Scene from "./scenes/space/StarLayer2Scene.js";
 import StarLayer3Scene from "./scenes/space/StarLayer3Scene.js";
 import StarLayer4Scene from "./scenes/space/StarLayer4Scene.js";
 
+// Planet Scenes:
+
+import PlatformingScene from "./scenes/planet/PlatformingScene.js";
+
 /**
  * This is just a test of the Cartesian System with Phaser 3 it's not an actual plugin yet...
  * Just a prototype
@@ -34,7 +38,11 @@ var config = {
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     scene: [
-        MainScene, UIDebugScene, DebugScene, PlanetScene, StarLayerScene, StarLayer2Scene, StarLayer3Scene, StarLayer4Scene, EffectsScene
+        // Space scenes
+        MainScene, UIDebugScene, DebugScene, PlanetScene, StarLayerScene, StarLayer2Scene, StarLayer3Scene, StarLayer4Scene, EffectsScene,
+
+        // Planet scenes
+        PlatformingScene
     ]
 };
 

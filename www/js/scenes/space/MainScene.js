@@ -139,6 +139,8 @@ export default class MainScene extends Phaser.Scene
         this.scene.stop("starLayer2");
         this.scene.stop("starLayer3");
         this.scene.stop("starLayer4");
+
+        this.scene.start("platforming");
     }
 
     setupWorldCameraFocus ()
