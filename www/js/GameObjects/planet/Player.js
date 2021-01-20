@@ -1,3 +1,6 @@
+/**
+ * @this {Phaser.Physics.Arcade.Image}
+ */
 export default class Player extends Phaser.Physics.Arcade.Image 
 {
     /**
@@ -28,7 +31,7 @@ export default class Player extends Phaser.Physics.Arcade.Image
             d: D
         });
 
-        this.setCollideWorldBounds(true, true, true, false, 0, 0);
+        this.setCollideWorldBounds(true, 0, 0);
     }
 
     preUpdate ()

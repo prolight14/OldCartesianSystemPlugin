@@ -131,16 +131,28 @@ export default class MainScene extends Phaser.Scene
 
     switchToPlanet ()
     {
-        this.scene.stop("UIDebug");
-        this.scene.stop("debug");
-        this.scene.stop("effects");
-        this.scene.stop("planet");
-        this.scene.stop("starLayer");
-        this.scene.stop("starLayer2");
-        this.scene.stop("starLayer3");
-        this.scene.stop("starLayer4");
+        this.scene.sleep("UIDebug");
+        this.scene.sleep("debug");
+        this.scene.sleep("effects");
+        this.scene.sleep("planet");
+        this.scene.sleep("starLayer");
+        this.scene.sleep("starLayer2");
+        this.scene.sleep("starLayer3");
+        this.scene.sleep("starLayer4");
 
-        this.scene.start("platforming");
+        this.scene.sleep();
+        this.scene.run("platforming");
+
+        // this.scene.stop("UIDebug");
+        // this.scene.stop("debug");
+        // this.scene.stop("effects");
+        // this.scene.stop("planet");
+        // this.scene.stop("starLayer");
+        // this.scene.stop("starLayer2");
+        // this.scene.stop("starLayer3");
+        // this.scene.stop("starLayer4");
+
+        // this.scene.start("platforming");
     }
 
     setupWorldCameraFocus ()

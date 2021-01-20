@@ -16,7 +16,7 @@ CartesianSystemPlugin.prototype = {
     {
         var eventEmitter = this.systems.events;
 
-        eventEmitter.on('destroy', this.destroy, this);
+        eventEmitter.on('shutdown', this.shutdown, this);
     },
 
     setupWorld: function(config)
@@ -88,7 +88,7 @@ CartesianSystemPlugin.prototype = {
 
             this.initializedGameObjects = true;
         }
- 
+
         var world = this.world;
         world.cam.update();
         world.processOnscreen();
@@ -97,9 +97,12 @@ CartesianSystemPlugin.prototype = {
         world.utils.resetProcessList();
     },
 
-    destroy: function()
+    shutdown: function()
     {
-        this.shutdown();
+        if(this.world && typeof this.world.destroy === "function")
+        {
+            this.world.destroy();
+        }
 
         this.scene = undefined;
         this.world = undefined;
