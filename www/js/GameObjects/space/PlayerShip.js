@@ -4,6 +4,14 @@ const HALF_PI = Math.PI / 2;
 
 export default class PlayerShip extends PhysicsSprite
 {
+    /**
+     * 
+     * @param {Phaser.Scene} scene 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {string} texture 
+     * @param {string} frame 
+     */
     constructor (scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
@@ -31,6 +39,14 @@ export default class PlayerShip extends PhysicsSprite
             y: this.y,
             speed: 200,
             lifespan: 700
+        });
+
+        scene.events.on("sleep", () =>
+        {
+            for(var i in this.keys)
+            {
+                this.keys[i].reset();
+            }
         });
     }
 

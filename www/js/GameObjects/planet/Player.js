@@ -55,7 +55,7 @@ export default class Player extends Phaser.Physics.Arcade.Image
 
         if(onGround && (keys.up.isDown || keys.w.isDown))
         {
-            this.setVelocityY(-500);
+            this.setVelocityY(-380);
         }
     }
 }

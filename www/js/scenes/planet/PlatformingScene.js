@@ -174,10 +174,9 @@ export default class PlatformingScene extends Phaser.Scene
     {
         this.scene.stop();
         this.scene.get("main").playerShip.y += 600;
+        this.scene.get("main").playerShip.body.postUpdate();
         this.scene.run("main");
         this.scene.get("main").setupScenes();
-
-        // this.scene.start("main");
     }
 
     update ()

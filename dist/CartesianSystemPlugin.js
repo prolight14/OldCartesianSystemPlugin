@@ -204,11 +204,6 @@ CartesianSystemPlugin.prototype = {
 
     shutdown: function()
     {
-        if(this.world && typeof this.world.destroy === "function")
-        {
-            this.world.destroy();
-        }
-
         this.scene = undefined;
         this.world = undefined;
         this.systems = undefined;

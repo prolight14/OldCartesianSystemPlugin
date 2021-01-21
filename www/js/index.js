@@ -10,6 +10,7 @@ import PlanetScene from "./scenes/space/PlanetScene.js";
 import StarLayer2Scene from "./scenes/space/StarLayer2Scene.js";
 import StarLayer3Scene from "./scenes/space/StarLayer3Scene.js";
 import StarLayer4Scene from "./scenes/space/StarLayer4Scene.js";
+import MiniMapScene from "./scenes/space/MiniMapScene.js";
 
 // Planet Scenes:
 
@@ -39,7 +40,7 @@ var config = {
     },
     scene: [
         // Space scenes
-        MainScene, UIDebugScene, DebugScene, PlanetScene, StarLayerScene, StarLayer2Scene, StarLayer3Scene, StarLayer4Scene, EffectsScene,
+        MainScene, UIDebugScene, DebugScene, PlanetScene, StarLayerScene, StarLayer2Scene, StarLayer3Scene, StarLayer4Scene, EffectsScene, MiniMapScene,
 
         // Planet scenes
         PlatformingScene

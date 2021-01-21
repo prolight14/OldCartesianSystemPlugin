@@ -41,13 +41,16 @@ export default class MainScene extends Phaser.Scene
 
         let enemyShips = world.add.gameObjectArray(EnemyShip);
 
-        var i, angle, length;
-        for(i = 0; i < 300; i++)
-        {
-            angle = Math.random() * Math.PI * 2;
-            length = Phaser.Math.Between(0, 150000);
-            enemyShips.add(this, 77900 + Math.cos(angle) * length, 60500 + Math.sin(angle) * length, "enemyShip");
-        }
+        // var i, angle, length;
+        // for(i = 0; i < 300; i++)
+        // {
+        //     angle = Math.random() * Math.PI * 2;
+        //     length = Phaser.Math.Between(0, 1500);
+        //     enemyShips.add(this, 77900 + Math.cos(angle) * length, 60500 + Math.sin(angle) * length, "enemyShip");
+        // }
+
+        enemyShips.add(this, 77900, 60500, "enemyShip");
+        enemyShips.add(this, 77900, 60500, "enemyShip");
 
         var nebulae = world.add.gameObjectArray(Nebula);
 
@@ -112,6 +115,7 @@ export default class MainScene extends Phaser.Scene
     setupScenes ()
     {
         this.scene.run("UIDebug");
+        this.scene.run("miniMap").bringToTop("miniMap");
         
         // Scenes that follow the camera:
         // this.scene.run("debug");
@@ -139,20 +143,10 @@ export default class MainScene extends Phaser.Scene
         this.scene.sleep("starLayer2");
         this.scene.sleep("starLayer3");
         this.scene.sleep("starLayer4");
+        this.scene.sleep("miniMap");
 
         this.scene.sleep();
         this.scene.run("platforming");
-
-        // this.scene.stop("UIDebug");
-        // this.scene.stop("debug");
-        // this.scene.stop("effects");
-        // this.scene.stop("planet");
-        // this.scene.stop("starLayer");
-        // this.scene.stop("starLayer2");
-        // this.scene.stop("starLayer3");
-        // this.scene.stop("starLayer4");
-
-        // this.scene.start("platforming");
     }
 
     setupWorldCameraFocus ()

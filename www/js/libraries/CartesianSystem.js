@@ -894,6 +894,18 @@ function World(config)
 
         return this;
     };
+    this.grid.loopThroughCoordinates = function(callback, minCol, minRow, maxCol, maxRow)
+    {
+        var col, row;
+
+        for(col = minCol; col <= maxCol; col++)
+        {
+            for(row = minRow; row <= maxRow; row++)
+            {
+                callback(cameraGrid.grid[col][row], col, row);
+            }
+        }
+    };
     this.grid.loopThroughAllCells = function(callback)
     {
         cameraGrid.loopThroughAllCells(callback);
@@ -1061,17 +1073,6 @@ function World(config)
     this.cam.updateBoundingBox = function()
     {
         camera.updateBoundingBox();
-    };
-
-    // DEV only!
-    this.exposeInternals = function()
-    {
-        return { 
-            camera: camera,
-            cameraGrid: cameraGrid,
-            gameObjectHandler: gameObjectHandler,
-            cameraTracker: cameraTracker
-        };
     };
 }
 
