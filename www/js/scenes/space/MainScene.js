@@ -31,6 +31,10 @@ export default class MainScene extends Phaser.Scene
             frameWidth: 64,
             frameHeight: 16
         });
+
+        // For brevity
+        this.game.config.halfWidth = this.game.config.width / 2;
+        this.game.config.halfHeight = this.game.config.halfHeight / 2;
     }
 
     addObjectsToWorld ()
@@ -41,16 +45,13 @@ export default class MainScene extends Phaser.Scene
 
         let enemyShips = world.add.gameObjectArray(EnemyShip);
 
-        // var i, angle, length;
-        // for(i = 0; i < 300; i++)
-        // {
-        //     angle = Math.random() * Math.PI * 2;
-        //     length = Phaser.Math.Between(0, 1500);
-        //     enemyShips.add(this, 77900 + Math.cos(angle) * length, 60500 + Math.sin(angle) * length, "enemyShip");
-        // }
-
-        enemyShips.add(this, 77900, 60500, "enemyShip");
-        enemyShips.add(this, 77900, 60500, "enemyShip");
+        var i, angle, length;
+        for(i = 0; i < 45; i++)
+        {
+            angle = Math.random() * Math.PI * 2;
+            length = Phaser.Math.Between(0, 1500);
+            enemyShips.add(this, 77900 + Math.cos(angle) * length, 60500 + Math.sin(angle) * length, "enemyShip");
+        }
 
         var nebulae = world.add.gameObjectArray(Nebula);
 

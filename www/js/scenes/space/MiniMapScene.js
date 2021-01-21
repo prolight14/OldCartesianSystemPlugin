@@ -61,6 +61,9 @@ export default class MiniMapScene extends Phaser.Scene
             this.innerWindowHeight = this.miniMapHeight;
         }
 
+        this.halfInnerWindowWidth = this.innerWindowWidth / 2;
+        this.halfInnerWindowHeight = this.innerWindowHeight / 2;
+
         this.innerWindowInnerX = (this.miniMapWidth - this.innerWindowWidth) / 2 + 1.5;
         this.innerWindowInnerY = (this.miniMapHeight - this.innerWindowHeight) / 2 + 1.5;
 
@@ -76,7 +79,7 @@ export default class MiniMapScene extends Phaser.Scene
     {
         this.innerGraphics.clear();
 
-        this.innerGraphics.fillStyle(0x56BE2A);
+        this.innerGraphics.fillStyle(0x01C5C5);
         this.innerGraphics.fillRect(
             this.innerWindowInnerX + this.input.activePointer.x * this.innerWindowWidth / this.game.config.width,
             this.innerWindowInnerY + this.input.activePointer.y * this.innerWindowHeight / this.game.config.height,
@@ -87,20 +90,58 @@ export default class MiniMapScene extends Phaser.Scene
         this.updateInnerWindowGraphics();
 
         let csWorld = this.scene.get("main").csPlugin.world;
+        
+        const padding = this.PADDING;
+
+        const PADDED_WIDTH = this.game.config.width * padding;
+        const PADDED_HEIGHT = this.game.config.height * padding;
+
+        let mainScene = this.scene.get("main");
+        var camera = mainScene.cameras.main;
+        
+        const HALF_PADDED_WIDTH = PADDED_WIDTH / 2;
+        const HALF_PADDED_HEIGHT = PADDED_HEIGHT / 2;
+
+        var minX = camera.scrollX - HALF_PADDED_WIDTH;
+        var minY = camera.scrollY - HALF_PADDED_HEIGHT;
+        var maxX = camera.scrollX + HALF_PADDED_WIDTH;
+        var maxY = camera.scrollY + HALF_PADDED_HEIGHT;
+
+        var minCell = csWorld.grid.getCoordinates(minX, minY);
+        var maxCell = csWorld.grid.getCoordinates(maxX, maxY);
             
-        // csWorld.grid.loopThroughCoordinates((cell) =>
-        // {
-        //     for(var i in cell)
-        //     {
-        //         switch(cell[i].arrayName)
-        //         {
-        //             case "enemyShip":
-        //                 var scroll = csWorld.cam.getScroll();
-        //                 var enemyShip = csWorld.get.gameObject(cell[i].arrayName, cell[i].id);
-        //                 break;
-        //         }
-        //     }
-        // },
-        // minCell.col, minCell.row, maxCell.col, maxCell.row);
+        this.innerGraphics.fillStyle(0x56BE2A);
+
+        csWorld.grid.loopThroughCoordinates((cell) =>
+        {
+            for(var i in cell)
+            {
+                switch(cell[i].arrayName)
+                {
+                    case "enemyShip":
+                        var enemyShip = csWorld.get.gameObject(cell[i].arrayName, cell[i].id);
+
+                        var x = ((enemyShip.x - minX) * this.miniMapWidth / PADDED_WIDTH - this.halfInnerWindowWidth) / camera.zoom;
+                        var y = ((enemyShip.y - minY) * this.miniMapHeight / PADDED_HEIGHT - this.halfInnerWindowHeight) / camera.zoom;
+
+                        if(x > 0 && x < this.miniMapWidth && y > 0 && y < this.miniMapWidth)
+                        {
+                            this.innerGraphics.fillRect(x, y, 2, 2);
+                        }
+                        break;
+                }
+            }
+        },
+        minCell.col, minCell.row, maxCell.col, maxCell.row);
+
+        this.innerGraphics.fillStyle(0xB50009);
+
+        var playerShip = mainScene.playerShip;
+        this.innerGraphics.fillRect(
+            ((playerShip.x - minX) * this.miniMapWidth / PADDED_WIDTH - this.halfInnerWindowWidth) / camera.zoom,
+            ((playerShip.y - minY) * this.miniMapHeight / PADDED_HEIGHT - this.halfInnerWindowHeight) / camera.zoom, 
+            2, 
+            2
+        );
     }
 }
