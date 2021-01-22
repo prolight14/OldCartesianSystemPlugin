@@ -34,6 +34,7 @@ var config = {
     //     target: 300,
     //     forceSetTimeOut: true
     // },
+    disableContextMenu: true,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,

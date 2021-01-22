@@ -195,6 +195,14 @@ export default class MainScene extends Phaser.Scene
             'down': this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)
         };
 
+        var cam = this.cameras.main;
+
+        this.input.on("wheel", (pointer, gameObjects, deltaX, deltaY) => 
+        {
+            
+            this.setCameraZoom(Math.min(Math.max(cam.zoom - deltaY * 0.001, 0.25), 1.75));   
+        });
+
         // Mainly used for when the player presses both the keys at once to "reset" the camera 
         // so that when they let go they don't accidentally move the camera
         this.canRotateCamera = true;

@@ -30,7 +30,8 @@ export default class PlanetScene extends BaseBackgroundScene
         this.updateWorldCamera();
         this.updateWorld();
 
-        let playerShip = this.scene.get("main").playerShip;
+        let mainScene = this.scene.get("main");
+        let playerShip = mainScene.playerShip;
 
         let world = this.csPlanets.world;
 
@@ -39,7 +40,7 @@ export default class PlanetScene extends BaseBackgroundScene
 
         if(Math.pow(playerShip.x - planet.x, 2) + Math.pow(playerShip.y - planet.y, 2) < planetRadius)
         {
-            this.scene.get("main").switchToPlanet(planet);
+            mainScene.switchToPlanet(planet);
         }
     }
 }

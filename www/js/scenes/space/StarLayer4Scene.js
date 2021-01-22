@@ -14,7 +14,7 @@ export default class StarLayer4Scene extends BaseBackgroundScene
 
     create ()
     {
-        this.starsPerCell = 25;
+        this.starsPerCell = 40;
         this.starSize = 1;
         this.starScroll = 0.25;
 
