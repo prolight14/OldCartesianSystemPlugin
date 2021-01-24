@@ -20,7 +20,7 @@ export default class PlayerShip extends PhysicsSprite
             a: scene.input.keyboard.addKey('a'), 
             d: scene.input.keyboard.addKey('d'),
             w: scene.input.keyboard.addKey('w'),
-            s: scene.input.keyboard.addKey('s'),
+            s: scene.input.keyboard.addKey('s')
         };
 
         this.setScale(2, 2);

@@ -181,8 +181,8 @@ export default class MiniMapScene extends Phaser.Scene
         this.innerGraphics.fillStyle(0xB50009);
 
         this.innerGraphics.fillRect(
-            this.miniMapHalfWidth + 1.5,
-            this.miniMapHalfHeight + 1.5,
+            this.miniMapHalfWidth - 2,
+            this.miniMapHalfHeight - 2,
             4,
             4
         );
