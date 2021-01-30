@@ -1,4 +1,8 @@
  
+// Title screen scenes
+
+import TitleScreenScene from "./scenes/titleScreen/TitleScreen.js";
+
 // Space scenes
 
 import MainScene from "./scenes/space/MainScene.js";
@@ -28,7 +32,7 @@ import PlatformingScene from "./scenes/planet/PlatformingScene.js";
 var config = {
     type: Phaser.AUTO,
     width: 800,
-    height: 480, // 450 for 16:9 android smartphone ratio
+    height: 450, // 450 for 16:9 android smartphone ratio
     pixelArt: true, // Vital for any pixelated games
     // fps: {
     //     target: 300,
@@ -40,6 +44,9 @@ var config = {
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     scene: [
+        // Titlescreen scenes
+        TitleScreenScene,
+
         // Space scenes
         MainScene, UIDebugScene, DebugScene, PlanetScene, StarLayerScene, StarLayer2Scene, StarLayer3Scene, StarLayer4Scene, EffectsScene, MiniMapScene,
 
@@ -51,5 +58,5 @@ var config = {
 var game = new Phaser.Game(config);
 
 // Debug/Dev only
-window.game = game;
-window.config = config;
+// window.game = game;
+// window.config = config;

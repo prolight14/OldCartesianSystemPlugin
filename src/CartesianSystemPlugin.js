@@ -11,6 +11,8 @@ CartesianSystemPlugin.register = function(PluginManager)
     PluginManager.register('CartesianSystemPlugin', CartesianSystemPlugin, 'base');
 };
 
+// Todo (Important): Get rid of memory leak somehow
+
 CartesianSystemPlugin.prototype = {
     boot: function()
     {
@@ -102,7 +104,7 @@ CartesianSystemPlugin.prototype = {
         this.scene = undefined;
         this.world = undefined;
         this.systems = undefined;
-    }
+    },
 };
 
 CartesianSystemPlugin.prototype.constructor = CartesianSystemPlugin;
