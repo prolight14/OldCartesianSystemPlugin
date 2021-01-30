@@ -1,4 +1,6 @@
  
+import Phaser from "phaser";
+
 // Title screen scenes
 
 import TitleScreenScene from "./scenes/titleScreen/TitleScreen.js";

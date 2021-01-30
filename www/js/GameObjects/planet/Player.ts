@@ -9,7 +9,18 @@ export default class Player extends Phaser.Physics.Arcade.Image
      * @param {number} y 
      * @param {string} texture 
      */
-    constructor(scene, x, y, texture)
+    keys: {
+        left: Object,
+        right: Object,
+        up: Object,
+        down: Object,
+        w: Object,
+        a: Object,
+        s: Object,
+        d: Object,
+    }
+
+    constructor(scene: Phaser.Scene, x, y, texture)
     {
         super(scene, x, y, texture);
 
