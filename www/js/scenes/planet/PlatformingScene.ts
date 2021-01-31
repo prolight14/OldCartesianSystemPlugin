@@ -2,6 +2,9 @@ import Player from "../../GameObjects/planet/Player.js";
 
 export default class PlatformingScene extends Phaser.Scene
 {
+    isPlayerDead: boolean;
+    levelLayer: Phaser.Tilemaps.DynamicTilemapLayer;
+
     constructor ()
     {
         super({
@@ -24,6 +27,9 @@ export default class PlatformingScene extends Phaser.Scene
         this.load.image("player", "./assets/levels/playerBlank.png");
     }
 
+    spikeGroup: Phaser.Physics.Arcade.StaticGroup;
+    player: Player;
+
     create ()
     {
         this.isPlayerDead = false;
@@ -31,7 +37,7 @@ export default class PlatformingScene extends Phaser.Scene
         const background = this.add.graphics();
 
         background.fillStyle(0x00E9FF, 1);
-        background.fillRect(0, 0, this.game.config.width, this.game.config.height);
+        background.fillRect(0, 0, Number(this.game.config.width), Number(this.game.config.height));
         background.setScrollFactor(0);
 
         const tilemap = this.make.tilemap({ key: "level1" });
@@ -163,7 +169,7 @@ export default class PlatformingScene extends Phaser.Scene
         const camera = this.cameras.main;
 
         camera.startFollow(this.player);
-        camera.setZoom(2.0, 2.0);
+        camera.setZoom(2.0);
         camera.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels);
 
         this.physics.world.setBounds(0, 0, tilemap.widthInPixels, tilemap.heightInPixels, true, true, true, false);

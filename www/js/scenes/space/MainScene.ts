@@ -12,6 +12,8 @@ export default class MainScene extends Phaser.Scene
         super("main");
     }
 
+    playerShip;
+
     preload ()
     {
         this.load.scenePlugin({

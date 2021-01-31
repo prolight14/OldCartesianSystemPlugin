@@ -2,7 +2,11 @@ import PhysicsSprite from "./PhysicsSprite.js";
 
 export default class Nebula extends PhysicsSprite
 {
-    constructor (scene, x, y, texture, frame)
+    going: Phaser.Math.Vector2;
+    timer: number;
+    body;
+
+    constructor (scene: Phaser.Scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
 

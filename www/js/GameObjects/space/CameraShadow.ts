@@ -1,5 +1,16 @@
 export default class CameraShadow
 {
+    toSubX: number;
+    toSubY: number;
+    scene: Phaser.Scene;
+    guide: number;
+    x: number;
+    y: number;
+    target: {
+        x: number,
+        y: number
+    }
+
     constructor (scene, cs, x, y, guide)
     {
         this.scene = scene;

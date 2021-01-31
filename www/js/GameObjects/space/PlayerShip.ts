@@ -4,6 +4,19 @@ const HALF_PI = Math.PI / 2;
 
 export default class PlayerShip extends PhysicsSprite
 {
+    keys;
+
+    dirSpeed: number;
+    dirSpeedAcl: number;
+    dirSpeedDeacl: number;
+    dirSpeedAutoDeacl: number;
+    maxDirSpeed: number;
+    minDirSpeed: number;
+    rotSpeed: number;
+
+    thrusterEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
+    scene;
+
     /**
      * 
      * @param {Phaser.Scene} scene 
@@ -12,7 +25,7 @@ export default class PlayerShip extends PhysicsSprite
      * @param {string} texture 
      * @param {string} frame 
      */
-    constructor (scene, x, y, texture, frame)
+    constructor (scene: Phaser.Scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
 

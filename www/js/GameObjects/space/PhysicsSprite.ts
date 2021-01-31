@@ -1,6 +1,8 @@
 export default class PhysicsSprite extends Phaser.GameObjects.Sprite
 {
-    constructor (scene, x, y, texture, frame)
+    body;
+
+    constructor (scene: Phaser.Scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
 

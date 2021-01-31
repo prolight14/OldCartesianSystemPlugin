@@ -2,7 +2,26 @@ import PhysicsSprite from "./PhysicsSprite.js";
 
 export default class EnemyShip extends PhysicsSprite
 {
-    constructor (scene, x, y, texture, frame)
+    going: string;
+    controls: {
+        left;
+        right;
+        up;
+    }
+
+    dirSpeed: number ;
+    dirSpeedAcl: number;
+    dirSpeedDeacl: number;
+    dirSpeedAutoDeacl: number;
+    maxDirSpeed: number;
+    minDirSpeed: number;
+    rotSpeed: number;
+
+    swivelTimer;
+    body;
+    scene;
+
+    constructor (scene: Phaser.Scene, x, y, texture, frame)
     {
         super(scene, x, y, texture, frame);
 
